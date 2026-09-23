@@ -33,7 +33,21 @@ DAYFRAME INK PICTURE AREA — ABSOLUTE, HIGHEST PRIORITY
 - The generated artwork must be EXACTLY 1080 × 1350 px, portrait 4:5. Existing Dayframe Ink 4:5 artwork uses this same ratio.
 - Compose all artwork to the full 4:5 boundary so Dayframe Ink can scale it uniformly into its central 4:5 picture area with NO stretching and NO crop.
 - Do NOT add the outer Dayframe diary header boxes or lower diary-writing box. Those remain part of the app’s original Ink frame.
-- Four-cut mode: make a true 2 × 2 comic inside this exact 4:5 image, with equal panel widths/heights and consistent warm-white gutters, but NO visible panel border lines.
+- Four-cut mode uses this EXACT 1080 × 1350 coordinate contract:
+  • centered vertical gutter: x = 533–546 (14 px)
+  • centered horizontal gutter: y = 668–681 (14 px)
+  • CUT 1: x = 0–532, y = 0–667 (533 × 668)
+  • CUT 2: x = 547–1079, y = 0–667 (533 × 668)
+  • CUT 3: x = 0–532, y = 682–1349 (533 × 668)
+  • CUT 4: x = 547–1079, y = 682–1349 (533 × 668)
+- Do NOT add any outer canvas margin around the four CUT areas.
+- Inside EVERY CUT reserve the bottom 22% as the blank caption safe area.
+  • top-row caption safe area: y = 521–667
+  • bottom-row caption safe area: y = 1203–1349
+- Keep illustration content above those caption safe areas. All four blank caption areas must have exactly the same height.
+- Do NOT add extra blank space below CUT 3 or CUT 4.
+- Do NOT crop, stretch, enlarge, or shift any one CUT differently from the others.
+- Use clean warm-white gutters only; NO visible panel border lines.
 - Return only the flat 4:5 picture-area artwork. Dayframe Ink supplies the surrounding diary structure and editable text after import.
 
 FORMAT
