@@ -134,7 +134,7 @@ function renderProcessed45(includeFrame=true){
     x.fillStyle='#fff';x.fillRect(vx1,0,Math.max(1,vx2-vx1),out.height);x.fillRect(0,hy1,out.width,Math.max(1,hy2-hy1));
   }else{x.drawImage(EC,0,0,out.width,out.height)}
   if(includeFrame){
-    const vrW=360,vrH=450,sx=out.width/vrW,sy=out.height/vrH;x.save();x.scale(sx,sy);
+    const ar=q('#artArea').getBoundingClientRect(),vrW=ar.width||360,vrH=ar.height||450,sx=out.width/vrW,sy=out.height/vrH;x.save();x.scale(sx,sy);
     if(mode==='four'){const g=5,w=(vrW-g)/2,h=(vrH-g)/2;[[0,0],[w+g,0],[0,h+g],[w+g,h+g]].forEach((p,i)=>{const[a,b]=p,pp=3;line(x,a+pp,b+pp,a+w-pp,b+pp,701+i*11);line(x,a+w-pp,b+pp,a+w-pp,b+h-pp,702+i*11);line(x,a+w-pp,b+h-pp,a+pp,b+h-pp,703+i*11);line(x,a+pp,b+h-pp,a+pp,b+pp,704+i*11)})}else{const p=3;line(x,p,p,vrW-p,p,701);line(x,vrW-p,p,vrW-p,vrH-p,702);line(x,vrW-p,vrH-p,p,vrH-p,703);line(x,p,vrH-p,p,p,704)}
     x.restore()
   }
