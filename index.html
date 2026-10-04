@@ -231,8 +231,8 @@ ${mode==='four'?'- The STYLE instructions above must never alter CUT geometry. D
 - Check every CUT for the same identity, today’s outfit and coherent place/action continuity.
 - Check that no generated caption/date/pseudo-text/random logo/frame stroke exists except explicitly allowed exact place text.
 - Treat layout geometry as a separate technical handoff; never change character style to compensate for layout.
-Return only the finished flat artwork.`
-  const pv=q('#prompt').value,legacy=['v1.3','17%','114 px','114px','paper-fibre','brown-black'].filter(k=>pv.includes(k));
+Return only the finished flat artwork.`;
+  const pv=q('#prompt').value,legacy=['v1.3','v2.1','17%','114 px','114px','paper-fibre','brown-black'].filter(k=>pv.includes(k));
   const order=['[IDENTITY + STYLE','[TODAY’S OUTFIT','[CUT SCENES]','[DAYFRAME LAYOUT HANDOFF','[PRE-RETURN VISUAL QA]'].map(k=>pv.indexOf(k));
   const ordered=order.every((v,i)=>v>=0&&(i===0||v>order[i-1]));
   q('#promptQA').textContent=!legacy.length&&ordered?'✓ v2.2 단일 고정 가이드 · 구형 17%/114px/v1.3 없음 · 스타일/레이아웃 역할 분리 · 섹션 순서 정상':'⚠️ 프롬프트 검수 필요: '+(legacy.length?'구형 문구 '+legacy.join(', ')+' ':'')+(ordered?'':'섹션 순서 오류');
