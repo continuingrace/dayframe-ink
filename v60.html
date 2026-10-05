@@ -1,6 +1,6 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Dayframe Ink V60</title></head><body><script>
 (async()=>{
-  const res=await fetch('./index.html?v=59-base',{cache:'no-store'});
+  const res=await fetch('./base-v59.html?v=60-base',{cache:'no-store'});
   let h=await res.text();
   const must=(from,to,label)=>{if(!h.includes(from))throw new Error('V60 patch anchor missing: '+label);h=h.replace(from,to)};
   must('<span class="ver">V59</span>','<span class="ver">V60</span>','version');
