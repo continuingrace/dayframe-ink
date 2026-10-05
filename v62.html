@@ -1,9 +1,9 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Dayframe Ink V62</title></head><body><script>
 (async()=>{
-  const res=await fetch('./v60.html?v=62-shell',{cache:'no-store'});
+  const res=await fetch('./v60.html?v=62-shell-fix',{cache:'no-store'});
   let s=await res.text();
   s=s.replaceAll('V61','V62').replaceAll('v61','v62');
-  const anchor="  const sm=h.match(/<script>([\\s\\S]*)<\\/script>/);";
+  const anchor="  const sm=h.match(/<script>([\\s\\S]*?)<\\/script>/);if(!sm)throw new Error('V62 patched script missing');new Function(sm[1]);";
   if(!s.includes(anchor))throw new Error('V62 shell anchor missing');
   const patch=String.raw`
   /* V62 — frame centerlines align to the actual CUT boundaries.
