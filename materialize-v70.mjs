@@ -12,8 +12,8 @@ s=s.replace("  for(let i=0;i<4;i++)outerItems[i].text='';\n  activeOuter=0;","  
 s=s.replace("if(!outerItems[6].text)outerItems[6].text=q('#diary').value.trim();","if(!outerItems[2].text)outerItems[2].text=q('#diary').value.trim();");
 must(`+'위 Dayframe에는 4:5 지문을 복사하지 않고 빈 지문란으로 올렸습니다. CUT 1~4 새 지문을 입력하세요. 4:5 원래 규격의 14px 빈 거터를 선 굵기와 무관하게 유지합니다. 위 Dayframe의 CUT 지문은 별도로 새로 입력합니다.'`,`+'가운데 4컷과 CUT 1~4 지문은 완성한 4:5 상태 그대로 올렸습니다. 상단 왼쪽·상단 오른쪽·하단 기록만 새로 입력합니다. 14px 빈 거터와 현재 Ink 프레임 설정은 그대로 유지합니다.'`,`placement status`);
 s=s.replace('/* V70 responsive + independent top-cut captions */','/* V70 responsive · completed 4:5 captions preserved */');
-s=s.replace('grid-template-columns:repeat(4,minmax(0,1fr))!important','grid-template-columns:repeat(3,minmax(0,1fr))!important');
-s=s.replace('@media(max-width:600px){.caption-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}}','@media(max-width:600px){.caption-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}}');
+// Keep the existing 4-column CUT editor untouched; only the outer three controls use 3 columns.
+must('.caption-tabs button{width:100%!important;min-width:0!important;white-space:normal!important;line-height:1.2!important;padding:10px 7px!important}',`.caption-tabs button{width:100%!important;min-width:0!important;white-space:normal!important;line-height:1.2!important;padding:10px 7px!important}\n#outerTabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}`,`outer tab CSS`);
 if(s.includes('CUT 1 새 지문')||s.includes('outerItems[6]'))throw new Error('legacy independent CUT editor remains');
 const sm=s.match(/<script>([\s\S]*?)<\/script>/);if(!sm)throw new Error('script missing');new Function(sm[1]);
 fs.writeFileSync('v70.html',s);
