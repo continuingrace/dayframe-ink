@@ -1,0 +1,39 @@
+name: Materialize Dayframe Ink V69
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'materialize-v69.mjs'
+      - 'v67.html'
+      - 'v66.html'
+      - 'base-v59.html'
+      - '.github/workflows/materialize-v69.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Materialize one static HTML
+        run: node materialize-v69.mjs
+      - name: Verify no runtime patch chain
+        run: |
+          grep -q 'V69 STATIC BUILD' v69.html
+          ! grep -q "fetch('./base-v59.html" v69.html
+          ! grep -q "fetch('./v66.html" v69.html
+          grep -q 'location.replace' index.html
+      - name: Commit static build
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add v69.html index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Publish static Dayframe Ink V69'
+          git push
