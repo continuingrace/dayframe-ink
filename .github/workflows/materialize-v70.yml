@@ -1,0 +1,98 @@
+name: Materialize Dayframe Ink V70
+on:
+  push:
+    paths:
+      - '.github/workflows/materialize-v70.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build V70 from static V69
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('v69.html')
+          s=p.read_text()
+          original=s
+          s=s.replace('V69','V70')
+
+          old='''<div class="artCaptionCell ac1"><span id="frameCut1" class="frameCutText"></span></div><div class="artCaptionCell ac2"><span id="frameCut2" class="frameCutText"></span></div><div class="artCaptionCell ac3"><span id="frameCut3" class="frameCutText"></span></div><div class="artCaptionCell ac4"><span id="frameCut4" class="frameCutText"></span></div>'''
+          assert old in s, 'central overlay cells target missing'
+          s=s.replace(old,'')
+
+          old='''<div id="outerEditor" class="outerEditor" hidden><h3>5 · 상단 4컷·위·아래 칸 텍스트 편집</h3><button class="action" id="backToCutEdit" type="button">← 4:5 지문 위치 다시 조정</button><p class="hint">위로 올린 4컷의 지문은 4:5 PNG 지문과 별개입니다. CUT 1~4에는 새 문구를 입력하고, 상단 2칸과 하단 기록도 각각 편집합니다.</p><div class="caption-tabs" id="outerTabs"><button type="button" data-o="0" class="on">CUT 1 새 지문</button><button type="button" data-o="1">CUT 2 새 지문</button><button type="button" data-o="2">CUT 3 새 지문</button><button type="button" data-o="3">CUT 4 새 지문</button><button type="button" data-o="4">상단 왼쪽</button><button type="button" data-o="5">상단 오른쪽</button><button type="button" data-o="6">하단 기록</button></div>'''
+          new='''<div id="outerEditor" class="outerEditor" hidden><h3>5 · 상단·하단 칸 텍스트 편집</h3><button class="action" id="backToCutEdit" type="button">← 4:5 지문 위치 다시 조정</button><p class="hint">가운데 4컷과 각 CUT 지문은 완성한 4:5 상태 그대로 유지됩니다. 여기서는 상단 왼쪽·상단 오른쪽·하단 기록 3칸만 새로 입력합니다.</p><div class="caption-tabs" id="outerTabs"><button type="button" data-o="0" class="on">상단 왼쪽</button><button type="button" data-o="1">상단 오른쪽</button><button type="button" data-o="2">하단 기록</button></div>'''
+          assert old in s, 'outer editor target missing'
+          s=s.replace(old,new)
+
+          old="""const outerItems=[
+{label:'CUT 1 새 지문',target:'frameCut1',text:'',size:11,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'CUT 2 새 지문',target:'frameCut2',text:'',size:11,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'CUT 3 새 지문',target:'frameCut3',text:'',size:11,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'CUT 4 새 지문',target:'frameCut4',text:'',size:11,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'상단 왼쪽',target:'frameHeaderL',text:'',size:18,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'상단 오른쪽',target:'frameHeaderR',text:'',size:16,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'하단 기록',target:'frameNote',text:'',size:18,spacing:0,lineHeight:1.5,color:'#191816',x:50,y:50,font:'Pretendard'}];"""
+          new="""const outerItems=[
+{label:'상단 왼쪽',target:'frameHeaderL',text:'',size:18,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'상단 오른쪽',target:'frameHeaderR',text:'',size:16,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'하단 기록',target:'frameNote',text:'',size:18,spacing:0,lineHeight:1.5,color:'#191816',x:50,y:50,font:'Pretendard'}];"""
+          assert old in s, 'outerItems target missing'
+          s=s.replace(old,new)
+          s=s.replace("현재 선택한 폰트를 CUT 1~4 + 상단 2칸 + 하단 기록에 동일 적용했습니다.","현재 선택한 폰트를 상단 2칸 + 하단 기록에 동일 적용했습니다.")
+
+          old="""  const parents=[q('.artCaptionCell.ac1'),q('.artCaptionCell.ac2'),q('.artCaptionCell.ac3'),q('.artCaptionCell.ac4'),q('.header .box:first-child'),q('.header .box:last-child'),q('.note')];
+  outerItems.forEach((t,i)=>drawWrappedExportText(x,t,parents[i].getBoundingClientRect(),pr,S));"""
+          new="""  const parents=[q('.header .box:first-child'),q('.header .box:last-child'),q('.note')];
+  outerItems.forEach((t,i)=>drawWrappedExportText(x,t,parents[i].getBoundingClientRect(),pr,S));"""
+          assert old in s, 'export parents target missing'
+          s=s.replace(old,new)
+
+          start=s.index('function renderTopArtBase(){')
+          end=s.index("q('#placeInFrame').onclick",start)
+          newfun="""function renderTopArtBase(){
+  // V70: place the CURRENT completed 4:5 editor state into the long Dayframe.
+  // CUT 1–4 captions are already rasterized in EC and must remain unchanged.
+  const out=document.createElement('canvas');out.width=1080;out.height=1350;
+  const x=out.getContext('2d');
+  if(mode==='four')drawNormalizedFour(x,out.width,out.height);
+  else{drawEdit();x.fillStyle='#fff';x.fillRect(0,0,out.width,out.height);x.drawImage(EC,0,0,EC.width,EC.height,0,0,out.width,out.height)}
+  return out
+}
+"""
+          s=s[:start]+newfun+s[end:]
+
+          s=s.replace("  for(let i=0;i<4;i++)outerItems[i].text='';\n  activeOuter=0;","  activeOuter=0;")
+          s=s.replace("if(!outerItems[6].text)outerItems[6].text=q('#diary').value.trim();","if(!outerItems[2].text)outerItems[2].text=q('#diary').value.trim();")
+          oldmsg="+'위 Dayframe에는 4:5 지문을 복사하지 않고 빈 지문란으로 올렸습니다. CUT 1~4 새 지문을 입력하세요. 4:5 원래 규격의 14px 빈 거터를 선 굵기와 무관하게 유지합니다. 위 Dayframe의 CUT 지문은 별도로 새로 입력합니다.'"
+          newmsg="+'가운데 4컷과 CUT 1~4 지문은 완성한 4:5 상태 그대로 올렸습니다. 상단 왼쪽·상단 오른쪽·하단 기록만 새로 입력합니다. 14px 빈 거터와 현재 Ink 프레임 설정은 그대로 유지합니다.'"
+          assert oldmsg in s, 'placement status target missing'
+          s=s.replace(oldmsg,newmsg)
+
+          s=s.replace('/* V70 responsive + independent top-cut captions */','/* V70 responsive · completed 4:5 captions preserved */')
+          s=s.replace('grid-template-columns:repeat(4,minmax(0,1fr))!important','grid-template-columns:repeat(3,minmax(0,1fr))!important')
+          s=s.replace('@media(max-width:600px){.caption-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}}','@media(max-width:600px){.caption-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}}')
+
+          assert "CUT 1 새 지문" not in s, 'old independent CUT editor remains'
+          assert "outerItems[6]" not in s, 'old 7-item index remains'
+          assert "fixedCaptionBoxes(1080,1350).forEach" not in s[s.index('function renderTopArtBase(){'):s.index("q('#placeInFrame').onclick")], 'caption clearing remains'
+          Path('v70.html').write_text(s)
+          PY
+          node -e "const fs=require('fs');const s=fs.readFileSync('v70.html','utf8');const m=s.match(/<script>([\\s\\S]*?)<\\/script>/);if(!m)throw Error('script missing');new Function(m[1]);console.log('V70 JS syntax OK')"
+          python3 - <<'PY'
+          from pathlib import Path
+          idx='''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f4f0e7"><title>Dayframe Ink V70</title><style>html,body{margin:0;background:#f4f0e7;color:#191816;font-family:-apple-system,BlinkMacSystemFont,"Pretendard",sans-serif}body{display:grid;place-items:center;min-height:100svh;font-size:13px}</style></head><body><span>Dayframe Ink V70 여는 중…</span><script>location.replace('./v70.html'+location.search+location.hash)</script></body></html>'''
+          Path('index.html').write_text(idx)
+          PY
+      - name: Commit static V70
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add v70.html index.html
+          git commit -m "Publish Dayframe Ink V70 preserving completed CUT captions"
+          git push
