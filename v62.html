@@ -1,0 +1,83 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Dayframe Ink V62</title></head><body><script>
+(async()=>{
+  const res=await fetch('./v60.html?v=62-shell',{cache:'no-store'});
+  let s=await res.text();
+  s=s.replaceAll('V61','V62').replaceAll('v61','v62');
+  const anchor="  const sm=h.match(/<script>([\\s\\S]*)<\\/script>/);";
+  if(!s.includes(anchor))throw new Error('V62 shell anchor missing');
+  const patch=String.raw`
+  /* V62 — frame centerlines align to the actual CUT boundaries.
+     Only the four outside edges retain a 3 CSS px safety inset so the rough Ink stroke is not clipped by the canvas.
+     Internal edges sit exactly at x=533/547 and y=668/682 in the 1080×1350 coordinate system. */
+  h=h.replace(/function drawArtFrames\(\)\{[\s\S]*?\}function render\(\)\{/,
+\`function frameEdgeCoords(b,W,H,p=3){
+  const eps=.75,a=b.x,bb=b.y,r=a+b.w,bt=bb+b.h;
+  return{l:a<=eps?a+p:a,t:bb<=eps?bb+p:bb,r:r>=W-eps?r-p:r,b:bt>=H-eps?bt-p:bt}
+}
+function drawArtFrames(){
+  const c=q('#artFrameCanvas');if(!c)return;
+  let r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=r.width*d;c.height=r.height*d;
+  let x=c.getContext('2d');x.scale(d,d);const col=outerFrameStyle.color;
+  if(mode==='four'){
+    panelBoxesFor(r.width,r.height).forEach((b,i)=>{
+      const e=frameEdgeCoords(b,r.width,r.height,3);
+      line(x,e.l,e.t,e.r,e.t,701+i*11,1,col);
+      line(x,e.r,e.t,e.r,e.b,702+i*11,1,col);
+      line(x,e.r,e.b,e.l,e.b,703+i*11,1,col);
+      line(x,e.l,e.b,e.l,e.t,704+i*11,1,col)
+    })
+  }else{
+    let p=3;line(x,p,p,r.width-p,p,701,1,col);line(x,r.width-p,p,r.width-p,r.height-p,702,1,col);line(x,r.width-p,r.height-p,p,r.height-p,703,1,col);line(x,p,r.height-p,p,p,704,1,col)
+  }
+}function render(){\`);
+  h=h.replace(/  if\(includeFrame\)\{\n    const ar=q\('#artArea'\)[\s\S]*?    x\.restore\(\)\n  \}\n  return out/,
+\`  if(includeFrame){
+    const ar=q('#artArea').getBoundingClientRect(),vrW=ar.width||360,vrH=ar.height||450,sx=out.width/vrW,sy=out.height/vrH;
+    x.save();x.scale(sx,sy);
+    if(mode==='four'){
+      const boxes=panelBoxesFor(vrW,vrH);
+      boxes.forEach((b,i)=>{
+        const e=frameEdgeCoords(b,vrW,vrH,3),ws=.75;
+        line(x,e.l,e.t,e.r,e.t,701+i*11,ws,outerFrameStyle.color);
+        line(x,e.r,e.t,e.r,e.b,702+i*11,ws,outerFrameStyle.color);
+        line(x,e.r,e.b,e.l,e.b,703+i*11,ws,outerFrameStyle.color);
+        line(x,e.l,e.b,e.l,e.t,704+i*11,ws,outerFrameStyle.color)
+      })
+    }else{
+      const p=3,ws=.75;
+      line(x,p,p,vrW-p,p,701,ws,outerFrameStyle.color);
+      line(x,vrW-p,p,vrW-p,vrH-p,702,ws,outerFrameStyle.color);
+      line(x,vrW-p,vrH-p,p,vrH-p,703,ws,outerFrameStyle.color);
+      line(x,p,vrH-p,p,p,704,ws,outerFrameStyle.color)
+    }
+    x.restore()
+  }
+  return out\`);
+  h=h.replace("function v62RasterQA(c){",
+\`function v62CompositeGapQA(c){
+  if(!c||c.width!==1080||c.height!==1350)return{ok:false,msg:'합성 결과 크기 불일치'};
+  const d=c.getContext('2d').getImageData(0,0,1080,1350).data;
+  const zones=[[533,0,547,1350,'세로 거터'],[0,668,1080,682,'가로 거터']];
+  let worst=0,worstName='';
+  for(const [x0,y0,x1,y1,name] of zones){
+    let n=0,chromatic=0;
+    for(let y=y0;y<y1;y+=2)for(let xx=x0;xx<x1;xx+=2){
+      const k=(y*1080+xx)*4,r=d[k],g=d[k+1],b=d[k+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b);
+      n++;if(mx-mn>20&&mx>105)chromatic++
+    }
+    const rate=n?chromatic/n:1;if(rate>worst){worst=rate;worstName=name}
+  }
+  return{ok:worst<.025,msg:(worst<.025?'테두리 합성 후 거터 분리 통과':'테두리 바깥 그림 노출 감지')+' · '+worstName+' 색상 노출 '+Math.round(worst*1000)/10+'%'}
+}
+function v62RasterQA(c){\`);
+  h=h.replace("last45Canvas=renderProcessed45(true);const rq=v62RasterQA(renderProcessed45(false));",
+              "last45Canvas=renderProcessed45(true);const rq=v62RasterQA(renderProcessed45(false)),gapq=v62CompositeGapQA(last45Canvas);");
+  h=h.replace("q('#editStatus').textContent=(rq.ok?'✓ ':'⚠️ ')+rq.msg+' · 4:5 PNG는 전체 이미지를 한 번만 1080×1350에 그리며 크롭·좌우 이동이 없습니다. Ink 테두리는 출력에 한 번만 합성됩니다.'",
+              "q('#editStatus').textContent=(rq.ok&&gapq.ok?'✓ ':'⚠️ ')+rq.msg+' · '+gapq.msg+' · 4:5 원본은 통째로 유지하며 크롭·축소·좌우 이동하지 않습니다. 내부 Ink 선 중심은 실제 CUT 경계에 맞고 거터 중앙에는 그림이 노출되지 않습니다.'");
+  h=h.replace(" · 중앙 이미지는 테두리 없는 단일 레이어, Ink 테두리는 별도 1개 레이어입니다.'",
+              " · 중앙 이미지는 테두리 없는 단일 레이어, Ink 테두리는 별도 1개 레이어입니다. 내부 선은 CUT 경계에 맞춰 거터 바깥 그림 노출을 막습니다.'");
+  `;
+  s=s.replace(anchor,patch+anchor);
+  document.open();document.write(s);document.close();
+})().catch(err=>{document.body.innerHTML='<pre style="white-space:pre-wrap;padding:20px;font-family:system-ui">Dayframe Ink V62 로드 실패\n'+String(err)+'</pre>'});
+</script></body></html>
