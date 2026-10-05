@@ -46,9 +46,10 @@
 }
 
 /* V70 responsive · completed 4:5 captions preserved */
-.caption-tabs{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;overflow:visible!important}
+.caption-tabs{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;overflow:visible!important}
 .caption-tabs button{width:100%!important;min-width:0!important;white-space:normal!important;line-height:1.2!important;padding:10px 7px!important}
-@media(max-width:600px){.caption-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+#outerTabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+@media(max-width:600px){.caption-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 html,body{width:100%;max-width:100%;overflow-x:clip}
 .wrap{width:100%;max-width:760px;margin-left:auto;margin-right:auto;box-sizing:border-box}
 #artArea{width:100%;max-width:100%;min-width:0}
