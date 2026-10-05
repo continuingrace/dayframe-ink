@@ -1,0 +1,69 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Dayframe Ink V63</title></head><body><script>
+(async()=>{
+  const res=await fetch('./base-v59.html?v=63-base',{cache:'no-store'});
+  if(!res.ok)throw new Error('V63 base fetch failed: '+res.status);
+  let h=await res.text();
+  const must=(from,to,label)=>{if(!h.includes(from))throw new Error('V63 patch target missing: '+label);h=h.replace(from,to)};
+  const mustRe=(re,to,label)=>{const before=h;h=h.replace(re,to);if(h===before)throw new Error('V63 patch target missing: '+label)};
+  must('<span class="ver">V59</span>','<span class="ver">V63</span>','version');
+  h=h.replaceAll('Ink V59 프롬프트 만들기','Ink V63 프롬프트 만들기').replaceAll('DAYFRAME INK — V59 IMAGE PROMPT','DAYFRAME INK — V63 IMAGE PROMPT');
+  must('.art{height:auto;aspect-ratio:4/5;overflow:hidden;background:#fff}.placedCanvas{position:absolute;inset:0;width:100%;height:100%;display:none;z-index:1;background:#fff;object-fit:fill;pointer-events:none}',
+    '.art{height:auto;aspect-ratio:4/5;overflow:hidden;background:#fff;width:100%;min-width:0;max-width:100%}.placedCanvas{position:absolute;left:0;top:0;width:100%!important;height:100%!important;max-width:none!important;display:none;z-index:1;background:#fff;object-fit:fill!important;object-position:0 0!important;pointer-events:none;transform:none!important;margin:0!important;padding:0!important;border:0!important;box-sizing:border-box!important}',
+    'art/placed geometry css');
+  h=h.replace('</style>','\n/* V63 responsive invariants */\nhtml,body{width:100%;max-width:100%;overflow-x:hidden}\n.wrap{width:100%;max-width:760px;margin-left:auto;margin-right:auto}\n#artArea{width:100%;max-width:100%;min-width:0}\n@media(max-width:600px){.wrap{width:100%!important;max-width:100%!important;margin-left:auto!important;margin-right:auto!important}.card,.paper,.art{min-width:0;max-width:100%}}\n</style>');
+  must('<div class="outerframepanel"><p class="typepanel-title">긴 Dayframe 전체 선 색</p><p class="hint">선 굵기는 위 Dayframe의 ‘기본 굵기’ 레버 하나로 상단 2칸·가운데 그림 4컷·하단 기록칸까지 모두 함께 조절됩니다. 선 색도 이 긴 Dayframe 전체에 함께 적용됩니다.</p><div class="minirow"><label class="range colorrow">상단 2칸 + 그림 + 하단 기록 선 색<span class="colorwell"><input id="outerFrameColor" type="color" value="#302e2a"></span></label></div></div><div class="guidepanel"><p class="typepanel-title">하단 줄라인</p>',
+    '<div class="outerframepanel"><p class="typepanel-title">긴 Dayframe Ink 테두리</p><p class="hint">상단의 ‘프레임 선 색’과 ‘기본 굵기’는 상단 2칸·가운데 그림·하단 기록칸의 긴 Dayframe 테두리에 적용됩니다. 4:5 PNG용 CUT 선은 아래 4:5 편집 단계에서 별도로 조절할 수 있습니다.</p></div><div class="guidepanel"><p class="typepanel-title">하단 줄라인 · Ink 테두리와 별도</p>',
+    'duplicate outer color UI');
+  must("function setFrameColor(value,save=true){const v=value||'#302e2a';outerFrameStyle.color=v;const top=q('#frameColorTop'),later=q('#outerFrameColor'),hex=q('#frameColorHex');if(top&&top.value!==v)top.value=v;if(later&&later.value!==v)later.value=v;if(hex)hex.textContent=v.toLowerCase();if(save)localStorage.setItem('dayframeInk.frameColor',v);const placed=q('#placedCanvas'),wasPlaced=!!(placed&&placed.style.display==='block'&&resultImg);if(wasPlaced){placedSnapshot=renderProcessed45(true);delete placed.dataset.snapshotReady;drawPlacedArt()}else{placedSnapshot=null;if(placed)delete placed.dataset.snapshotReady}render()}\nq('#frameColorTop').oninput=e=>setFrameColor(e.target.value);\nq('#outerFrameColor').oninput=e=>setFrameColor(e.target.value);",
+    "function setFrameColor(value,save=true){const v=value||'#302e2a';outerFrameStyle.color=v;const top=q('#frameColorTop'),hex=q('#frameColorHex');if(top&&top.value!==v)top.value=v;if(hex)hex.textContent=v.toLowerCase();if(save)localStorage.setItem('dayframeInk.frameColor',v);render()}\nq('#frameColorTop').oninput=e=>setFrameColor(e.target.value);",
+    'single-layer frame color handler');
+  must('<div class="outputnote"><strong>두 결과를 모두 만들 수 있어요.</strong><br>① 위 Dayframe 그림영역에 넣기 · ② 지문이 들어간 4:5 이미지 자체 산출</div><div class="legacyframe">',
+    '<div class="outputnote"><strong>두 결과를 모두 만들 수 있어요.</strong><br>① 위 Dayframe 그림영역에 넣기 · ② 지문이 들어간 4:5 이미지 자체 산출</div><div class="typepanel" id="cutFramePanel"><p class="typepanel-title">4:5 그림 CUT 테두리</p><p class="hint">생성 이미지를 가져온 뒤에도 CUT 1~4의 Ink 선 굵기와 색을 조절할 수 있습니다. 그림 자체의 크기·위치는 바꾸지 않습니다.</p><div class="minirow"><label class="range">선 굵기 <span id="cutFrameWidthOut">5.1</span><input id="cutFrameWidth" type="range" min="2.5" max="8" step=".1" value="5.1"></label><label class="range colorrow">선 색<span class="colorwell"><input id="cutFrameColor" type="color" value="#302e2a"></span></label></div></div><div class="legacyframe">',
+    '4x5 stroke controls');
+  must("const EC=q('#editCanvas'),EX=EC.getContext('2d');let resultImg=null,editItems=[],activeEdit=0;",
+    "const cutFrameStyle={width:5.1,color:'#302e2a'};const EC=q('#editCanvas'),EX=EC.getContext('2d');let resultImg=null,editItems=[],activeEdit=0;",
+    'cut frame state');
+  mustRe(/function drawArtFrames\(\)\{[\s\S]*?\}function render\(\)\{/,
+`function frameEdgeCoords(b,W,H,p=3){const eps=.75,l=b.x,t=b.y,r=b.x+b.w,bt=b.y+b.h;return{l:l<=eps?l+p:l,t:t<=eps?t+p:t,r:r>=W-eps?r-p:r,b:bt>=H-eps?bt-p:bt}}
+function drawCutFrameSet(x,W,H,width,color,widthScale=1){
+  if(mode!=='four'){const p=3;line(x,p,p,W-p,p,701,widthScale,color,width);line(x,W-p,p,W-p,H-p,702,widthScale,color,width);line(x,W-p,H-p,p,H-p,703,widthScale,color,width);line(x,p,H-p,p,p,704,widthScale,color,width);return}
+  panelBoxesFor(W,H).forEach((b,i)=>{const e=frameEdgeCoords(b,W,H,3);line(x,e.l,e.t,e.r,e.t,701+i*11,widthScale,color,width);line(x,e.r,e.t,e.r,e.b,702+i*11,widthScale,color,width);line(x,e.r,e.b,e.l,e.b,703+i*11,widthScale,color,width);line(x,e.l,e.b,e.l,e.t,704+i*11,widthScale,color,width)})
+}
+function drawArtFrames(){const c=q('#artFrameCanvas');if(!c)return;const r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=Math.max(1,Math.round(r.width*d));c.height=Math.max(1,Math.round(r.height*d));const x=c.getContext('2d');x.scale(d,d);drawCutFrameSet(x,r.width,r.height,+q('#width').value,outerFrameStyle.color,1)}function render(){`,
+    'drawArtFrames boundary alignment');
+  mustRe(/  if\(includeFrame\)\{\n    const ar=q\('#artArea'\)[\s\S]*?    x\.restore\(\)\n  \}\n  return out/,
+`  if(includeFrame){
+    const ar=q('#artArea').getBoundingClientRect(),vrW=ar.width||360,vrH=ar.height||450,sx=out.width/vrW,sy=out.height/vrH;
+    x.save();x.scale(sx,sy);drawCutFrameSet(x,vrW,vrH,cutFrameStyle.width,cutFrameStyle.color,.75);x.restore()
+  }
+  return out`,
+    'renderProcessed45 frame path');
+  const controlAnchor="q('#stripOldFrames').onchange=()=>{};";
+  must(controlAnchor,
+`q('#cutFrameWidth').oninput=e=>{cutFrameStyle.width=+e.target.value;q('#cutFrameWidthOut').textContent=cutFrameStyle.width.toFixed(1);if(last45Canvas){last45Canvas=renderProcessed45(true);q('#savedImage').src=last45Canvas.toDataURL('image/png',1)}};
+q('#cutFrameColor').oninput=e=>{cutFrameStyle.color=e.target.value;if(last45Canvas){last45Canvas=renderProcessed45(true);q('#savedImage').src=last45Canvas.toDataURL('image/png',1)}};
+${controlAnchor}`,
+    '4x5 frame control handlers');
+  must("q('#placeInFrame').onclick=()=>{if(!resultImg)return alert('생성 이미지를 먼저 가져와 주세요.');drawEdit();if(mode==='four'&&q('#stripOldFrames').checked&&!autoGrid)autoGrid=detectGrid();placedSnapshot=renderProcessed45(false);const c=q('#placedCanvas');c.removeAttribute('src');delete c.dataset.snapshotReady;drawPlacedArt();c.style.display='block';q('#artFrameCanvas').style.display='block';drawArtFrames();q('#artGhost').hidden=true;q('#artGhost').style.display='none';parkEditorPreview();q('#outerEditor').hidden=false;if(!outerItems[2].text)outerItems[2].text=q('#diary').value.trim();syncOuter();updateGuides();q('#editStatus').textContent='현재 4:5 결과는 이미지 한 장으로 고정하고, 긴 Dayframe의 Ink 선은 별도 전용 레이어로 유지했습니다. ‘기본 굵기’와 선 색을 바꾸면 상단 2칸·가운데 그림·하단 기록칸이 함께 갱신됩니다.';q('#outerEditor').scrollIntoView({behavior:'auto',block:'nearest'})};",
+`q('#placeInFrame').onclick=()=>{if(!resultImg)return alert('생성 이미지를 먼저 가져와 주세요.');drawEdit();if(mode==='four'&&q('#stripOldFrames').checked&&!autoGrid)autoGrid=detectGrid();placedSnapshot=renderProcessed45(false);const c=q('#placedCanvas');c.removeAttribute('src');delete c.dataset.snapshotReady;drawPlacedArt();c.style.display='block';q('#artFrameCanvas').style.display='block';drawArtFrames();q('#artGhost').hidden=true;q('#artGhost').style.display='none';parkEditorPreview();q('#outerEditor').hidden=false;if(!outerItems[2].text)outerItems[2].text=q('#diary').value.trim();syncOuter();updateGuides();requestAnimationFrame(()=>{const ar=q('#artArea').getBoundingClientRect(),ir=c.getBoundingClientRect(),ok=Math.abs(ar.left-ir.left)<.75&&Math.abs(ar.top-ir.top)<.75&&Math.abs(ar.width-ir.width)<.75&&Math.abs(ar.height-ir.height)<.75;q('#editStatus').textContent=(ok?'✓ ':'⚠️ ')+'상단 배치 '+ar.width.toFixed(1)+'×'+ar.height.toFixed(1)+' / 이미지 '+ir.width.toFixed(1)+'×'+ir.height.toFixed(1)+' / Δx '+(ir.left-ar.left).toFixed(1)+' · 원본 4:5는 크롭·좌우 이동 없이 그대로 배치됩니다.'});q('#outerEditor').scrollIntoView({behavior:'auto',block:'nearest'})};`,
+    'placement geometry QA');
+  must("q('#editStatus').textContent=diff>.02?'⚠️ 4:5가 아닌 이미지입니다. 원본은 자르지 않지만 다시 생성하는 것을 권장합니다.':!pxqa.ok?'⚠️ 픽셀 계약 불일치: '+pxqa.msg+' 프레임은 생성 이미지에 맞춰 변형하지 않고 Dayframe 고정 좌표를 유지합니다.':qa.ok?'✓ '+pxqa.msg+' Dayframe 고정 프레임 좌표를 사용합니다.':'⚠️ 픽셀 크기/빈영역은 통과했지만 CUT 경계가 기준에서 벗어났습니다. V59 프롬프트로 다시 생성하는 것을 권장합니다. (경계 오차 약 '+qa.err+'px)'",
+    "q('#editStatus').textContent=diff>.02?'⚠️ 4:5가 아닌 이미지입니다. 원본은 자르지 않고 전체를 유지합니다.':!pxqa.ok?'⚠️ 픽셀 계약 불일치: '+pxqa.msg+' 원본은 크롭·좌우 이동하지 않고 고정 CUT 좌표를 사용합니다.':'✓ '+pxqa.msg+' 원본 1080×1350 좌표를 그대로 유지합니다.'",
+    'import status');
+  h=h.replace('// V59: the central artwork is one flattened <img> containing its Ink frame.\n  // Never draw a second artFrameCanvas over it.','// V63: placedCanvas is borderless content; artFrameCanvas is the single long-Dayframe Ink layer.');
+  h=h.replace("q('#downloadFinalFrame').onclick=()=>{if(!lastFinalCanvas)lastFinalCanvas=renderFinalFrame();downloadCanvas(lastFinalCanvas,'dayframe-ink-complete.png')}","q('#downloadFinalFrame').onclick=()=>{lastFinalCanvas=renderFinalFrame();downloadCanvas(lastFinalCanvas,'dayframe-ink-complete.png')}");
+  const placeAnchor="q('#placeInFrame').onclick=()=>";
+  if(!h.includes(placeAnchor))throw new Error('V63 placement anchor missing after patch');
+  h=h.replace(placeAnchor,`function v63GapQA(c){if(!c||c.width!==1080||c.height!==1350)return{ok:false,msg:'출력 크기 불일치'};const d=c.getContext('2d').getImageData(0,0,1080,1350).data,zones=[[536,3,544,1347,'세로'],[3,671,1077,679,'가로']];let worst=0,name='';for(const [x0,y0,x1,y1,nm] of zones){let n=0,bad=0;for(let y=y0;y<y1;y+=2)for(let x=x0;x<x1;x+=2){const k=(y*1080+x)*4,r=d[k],g=d[k+1],b=d[k+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b);n++;if(mx-mn>28&&mx>120)bad++}const rate=n?bad/n:1;if(rate>worst){worst=rate;name=nm}}return{ok:worst<.02,msg:(worst<.02?'합성 후 거터 분리 정상':'합성 후 그림색 노출 감지')+' · '+name+' '+(worst*100).toFixed(1)+'%'}}\n${placeAnchor}`);
+  must("last45Canvas=renderProcessed45(true);q('#savedImage').src=last45Canvas.toDataURL('image/png',1);",
+    "last45Canvas=renderProcessed45(true);const gapQA=v63GapQA(last45Canvas);q('#savedImage').src=last45Canvas.toDataURL('image/png',1);",
+    'save composite QA');
+  h=h.replace("q('#editStatus').textContent='지문과 4:5 전용의 조금 더 가는 Ink 프레임을 반영한 1080×1350 이미지가 생성되었습니다. 자글자글 질감은 그대로이며, 아래 Instagram 여백 가공으로 게시용 여백도 추가할 수 있습니다.'","q('#editStatus').textContent=(gapQA.ok?'✓ ':'⚠️ ')+gapQA.msg+' · 4:5 CUT 선 '+cutFrameStyle.width.toFixed(1)+'px / '+cutFrameStyle.color+' · 원본 그림은 크롭·축소·좌우 이동하지 않았습니다.'");
+  const sm=h.match(/<script>([\s\S]*?)<\/script>/);
+  if(!sm)throw new Error('V63 patched app script missing');
+  new Function(sm[1]);
+  if(h.includes('id="outerFrameColor"'))throw new Error('V63 duplicate outer frame color remained');
+  if(!h.includes('id="cutFrameWidth"')||!h.includes('frameEdgeCoords'))throw new Error('V63 critical controls/frame geometry missing');
+  document.open();document.write(h);document.close();
+})().catch(err=>{document.body.innerHTML='<pre style="white-space:pre-wrap;padding:20px;font-family:system-ui">Dayframe Ink V63 로드 실패\n'+String(err)+'</pre>'});
+</script></body></html>
