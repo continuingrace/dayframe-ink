@@ -1,0 +1,33 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Dayframe Ink V67</title></head><body><script>
+(async()=>{
+  const res=await fetch('./v66.html?v=67-stable',{cache:'no-store'});
+  if(!res.ok)throw new Error('V67 base fetch failed: '+res.status);
+  let s=await res.text();
+  const must=(from,to,label)=>{if(!s.includes(from))throw new Error('V67 patch target missing: '+label);s=s.replace(from,to)};
+  s=s.replaceAll('V66','V67').replaceAll('v=66-base','v=67-base');
+
+  must(
+`function frameEdgeCoords(b,W,H,p=3){\n  const eps=.75,l=b.x,t=b.y,r=b.x+b.w,bt=b.y+b.h;\n  return{l:l<=eps?l+p:l,t:t<=eps?t+p:t,r:r>=W-eps?r-p:r,b:bt>=H-eps?bt-p:bt}\n}\nfunction drawCutFrameSet(x,W,H,width,color,widthScale=1){\n  if(mode!=='four'){const p=Math.min(W*(10/1080),H*(10/1350));line(x,p,p,W-p,p,701,widthScale,color,width);line(x,W-p,p,W-p,H-p,702,widthScale,color,width);line(x,W-p,H-p,p,H-p,703,widthScale,color,width);line(x,p,H-p,p,p,704,widthScale,color,width);return}\n  panelBoxesFor(W,H).forEach((b,i)=>{const e=frameEdgeCoords(b,W,H);line(x,e.l,e.t,e.r,e.t,701+i*11,widthScale,color,width);line(x,e.r,e.t,e.r,e.b,702+i*11,widthScale,color,width);line(x,e.r,e.b,e.l,e.b,703+i*11,widthScale,color,width);line(x,e.l,e.b,e.l,e.t,704+i*11,widthScale,color,width)})\n}`,
+`function frameEdgeCoords(b,W,H,p=3){\n  const eps=.75,l=b.x,t=b.y,r=b.x+b.w,bt=b.y+b.h;\n  return{l:l<=eps?l+p:l+p,t:t<=eps?t+p:t+p,r:r>=W-eps?r-p:r-p,b:bt>=H-eps?bt-p:bt-p}\n}\nfunction drawCutFrameSet(x,W,H,width,color,widthScale=1){\n  const visualW=Math.max(1,width*widthScale),inset=Math.max(3,visualW*.58+1.5);\n  if(mode!=='four'){const p=inset;line(x,p,p,W-p,p,701,widthScale,color,width);line(x,W-p,p,W-p,H-p,702,widthScale,color,width);line(x,W-p,H-p,p,H-p,703,widthScale,color,width);line(x,p,H-p,p,p,704,widthScale,color,width);return}\n  panelBoxesFor(W,H).forEach((b,i)=>{const e=frameEdgeCoords(b,W,H,inset);line(x,e.l,e.t,e.r,e.t,701+i*11,widthScale,color,width);line(x,e.r,e.t,e.r,e.b,702+i*11,widthScale,color,width);line(x,e.r,e.b,e.l,e.b,703+i*11,widthScale,color,width);line(x,e.l,e.b,e.l,e.t,704+i*11,widthScale,color,width)})\n}`,
+  'gap-preserving frame geometry');
+
+  must(
+`    // V67: 4:5 PNG stroke width is measured in output pixels, never mobile CSS pixels.\n    // This keeps the canonical 14px gutters visibly open even at the thinnest setting.\n    drawCutFrameSet(x,out.width,out.height,cutFrameStyle.width,cutFrameStyle.color,.75)`,
+`    // V67 stabilization: the slider keeps the original on-screen V3 visual scale.\n    // 1080px output is about 3x the editor preview width, so scale only the width, never the texture math.\n    drawCutFrameSet(x,out.width,out.height,cutFrameStyle.width*3,cutFrameStyle.color,1)`,
+  '4x5 stroke scale');
+
+  must(
+`/* V67 responsive + independent top-cut captions */`,
+`/* V67 responsive + independent top-cut captions */\n.caption-tabs{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;overflow:visible!important}\n.caption-tabs button{width:100%!important;min-width:0!important;white-space:normal!important;line-height:1.2!important;padding:10px 7px!important}\n@media(max-width:600px){.caption-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}}`,
+  'caption tab repair');
+
+  must(
+`4:5 원래 규격의 14px 자동 여백을 그대로 유지하며, 위 Dayframe의 CUT 지문은 별도로 새로 입력합니다.`,
+`4:5 원래 규격의 14px 빈 거터를 선 굵기와 무관하게 유지합니다. 위 Dayframe의 CUT 지문은 별도로 새로 입력합니다.`,
+  'status copy');
+
+  const sm=s.match(/<script>([\s\S]*?)<\/script>/);
+  if(!sm)throw new Error('V67 patched shell missing');
+  new Function(sm[1]);
+})().catch(err=>{document.body.innerHTML='<pre style="white-space:pre-wrap;padding:20px;font:13px/1.5 sans-serif">Dayframe Ink V67 로드 실패\n'+String(err&&err.message||err)+'</pre>'})
+</script></body></html>
