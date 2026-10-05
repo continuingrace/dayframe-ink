@@ -1,0 +1,160 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Dayframe Ink V66</title></head><body><script>
+(async()=>{
+  const res=await fetch('./base-v59.html?v=66-base',{cache:'no-store'});
+  if(!res.ok)throw new Error('V66 base fetch failed: '+res.status);
+  let h=await res.text();
+  const must=(from,to,label)=>{if(!h.includes(from))throw new Error('V66 patch target missing: '+label);h=h.replace(from,to)};
+  const mustRe=(re,to,label)=>{const before=h;h=h.replace(re,to);if(h===before)throw new Error('V66 patch target missing: '+label)};
+
+  must('<span class="ver">V59</span>','<span class="ver">V66</span>','version');
+  h=h.replaceAll('Ink V59 프롬프트 만들기','Ink V66 프롬프트 만들기').replaceAll('DAYFRAME INK — V59 IMAGE PROMPT','DAYFRAME INK — V66 IMAGE PROMPT');
+
+  must('<div class="art" id="artArea"><img id="placedCanvas" class="placedCanvas" alt=""><span class="ghost" id="artGhost">그림 영역</span><canvas id="artFrameCanvas"></canvas></div>',
+`<div class="art" id="artArea"><img id="placedCanvas" class="placedCanvas" alt=""><span class="ghost" id="artGhost">그림 영역</span><canvas id="artFrameCanvas"></canvas>
+<div class="artCaptionCell ac1"><span id="frameCut1" class="frameCutText"></span></div><div class="artCaptionCell ac2"><span id="frameCut2" class="frameCutText"></span></div><div class="artCaptionCell ac3"><span id="frameCut3" class="frameCutText"></span></div><div class="artCaptionCell ac4"><span id="frameCut4" class="frameCutText"></span></div></div>`,
+    'art caption cells');
+
+  must('<h3>5 · 위·아래 칸 텍스트 편집</h3>',
+       '<h3>5 · 상단 4컷·위·아래 칸 텍스트 편집</h3>','outer editor heading');
+  must('<p class="hint">상단 2칸과 하단 기록을 각각 선택해 서체·크기·자간·행간·색상·위치를 조절합니다. 하단 가이드라인도 따로 조절할 수 있습니다.</p><div class="caption-tabs" id="outerTabs"><button type="button" data-o="0" class="on">상단 왼쪽</button><button type="button" data-o="1">상단 오른쪽</button><button type="button" data-o="2">하단 기록</button></div>',
+`<p class="hint">위로 올린 4컷의 지문은 4:5 PNG 지문과 별개입니다. CUT 1~4에는 새 문구를 입력하고, 상단 2칸과 하단 기록도 각각 편집합니다.</p><div class="caption-tabs" id="outerTabs"><button type="button" data-o="0" class="on">CUT 1 새 지문</button><button type="button" data-o="1">CUT 2 새 지문</button><button type="button" data-o="2">CUT 3 새 지문</button><button type="button" data-o="3">CUT 4 새 지문</button><button type="button" data-o="4">상단 왼쪽</button><button type="button" data-o="5">상단 오른쪽</button><button type="button" data-o="6">하단 기록</button></div>`,
+    'outer tabs');
+
+  must('.art{height:auto;aspect-ratio:4/5;overflow:hidden;background:#fff}.placedCanvas{position:absolute;inset:0;width:100%;height:100%;display:none;z-index:1;background:#fff;object-fit:fill;pointer-events:none}',
+    '.art{height:auto;aspect-ratio:4/5;overflow:hidden;background:#fff;width:100%;min-width:0;max-width:100%}.placedCanvas{position:absolute;inset:0;width:100%!important;height:100%!important;min-width:0!important;max-width:100%!important;display:none;z-index:1;background:#f8f7f5;object-fit:fill!important;object-position:0 0!important;pointer-events:none;transform:none!important;margin:0!important;padding:0!important;border:0!important;box-sizing:border-box!important}',
+    'placed geometry');
+
+  h=h.replace('</style>',`
+/* V66 responsive + independent top-cut captions */
+html,body{width:100%;max-width:100%;overflow-x:clip}
+.wrap{width:100%;max-width:760px;margin-left:auto;margin-right:auto;box-sizing:border-box}
+#artArea{width:100%;max-width:100%;min-width:0}
+.workflow,.wf,.editgrid,.preview,.instapanel,.outerEditor,.typepanel,.legacyframe,.guidepanel,.outerframepanel,.finalexport,.minirow,.row,.framecolorcontrol{min-width:0}
+.saveimg,.instaPreview,#savedImage,#finalFrameImage,#instagramPreview{display:block;width:100%!important;max-width:100%!important;height:auto!important;object-fit:contain}
+.action,button,textarea,input{min-width:0;max-width:100%}
+.hint,.status,.outputnote{overflow-wrap:anywhere}
+.artCaptionCell{position:absolute;z-index:3;pointer-events:none;overflow:hidden}
+.artCaptionCell.ac1{left:0;top:38.5925926%;width:49.3518519%;height:10.8888889%}
+.artCaptionCell.ac2{left:50.6481481%;top:38.5925926%;width:49.3518519%;height:10.8888889%}
+.artCaptionCell.ac3{left:0;top:89.1111111%;width:49.3518519%;height:10.8888889%}
+.artCaptionCell.ac4{left:50.6481481%;top:89.1111111%;width:49.3518519%;height:10.8888889%}
+.frameCutText{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:90%;max-width:90%;box-sizing:border-box;text-align:center;white-space:pre-wrap;overflow-wrap:anywhere;word-break:keep-all;overflow:visible}
+@media(max-width:600px){
+ .wrap{width:100%!important;max-width:100%!important;margin:0 auto!important}
+ .card,.paper,.art,.workflow,.wf,.editgrid,.instapanel,.outerEditor,.typepanel,.legacyframe,.guidepanel,.outerframepanel,.finalexport{width:100%;max-width:100%;min-width:0}
+ .wf,.instapanel,.outerEditor{overflow-x:clip}
+ .minirow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .row{grid-template-columns:104px minmax(0,1fr) 45px}
+ .framecolorcontrol{grid-template-columns:104px 52px minmax(0,1fr)}
+}
+</style>`);
+
+  must('<div class="outputnote"><strong>두 결과를 모두 만들 수 있어요.</strong><br>① 위 Dayframe 그림영역에 넣기 · ② 지문이 들어간 4:5 이미지 자체 산출</div><div class="legacyframe">',
+`<div class="outputnote"><strong>두 결과를 모두 만들 수 있어요.</strong><br>① 4:5 PNG는 현재 CUT 지문으로 저장 · ② 위 Dayframe에 올릴 때 CUT 1~4 지문은 새로 입력</div><div class="typepanel" id="cutFramePanel"><p class="typepanel-title">4:5 그림 CUT 테두리</p><p class="hint">생성 이미지를 가져온 뒤에도 CUT 1~4 Ink 선의 굵기와 색을 조절합니다. 기본 자동 여백은 선 굵기와 별개로 유지됩니다.</p><div class="minirow"><label class="range">선 굵기 <span id="cutFrameWidthOut">5.1</span><input id="cutFrameWidth" type="range" min="2.5" max="8" step=".1" value="5.1"></label><label class="range colorrow">선 색<span class="colorwell"><input id="cutFrameColor" type="color" value="#302e2a"></span></label></div></div><div class="legacyframe">`,
+    '4x5 frame controls');
+
+  must("const EC=q('#editCanvas'),EX=EC.getContext('2d');let resultImg=null,editItems=[],activeEdit=0;",
+    "const cutFrameStyle={width:5.1,color:'#302e2a'};const EC=q('#editCanvas'),EX=EC.getContext('2d');let resultImg=null,editItems=[],activeEdit=0;",
+    '4x5 frame state');
+
+  mustRe(/function drawArtFrames\(\)\{[\s\S]*?\}function render\(\)\{/,
+`function frameEdgeCoords(b,W,H,p=3){
+  const eps=.75,l=b.x,t=b.y,r=b.x+b.w,bt=b.y+b.h;
+  return{l:l<=eps?l+p:l,t:t<=eps?t+p:t,r:r>=W-eps?r-p:r,b:bt>=H-eps?bt-p:bt}
+}
+function drawCutFrameSet(x,W,H,width,color,widthScale=1){
+  if(mode!=='four'){const p=Math.min(W*(10/1080),H*(10/1350));line(x,p,p,W-p,p,701,widthScale,color,width);line(x,W-p,p,W-p,H-p,702,widthScale,color,width);line(x,W-p,H-p,p,H-p,703,widthScale,color,width);line(x,p,H-p,p,p,704,widthScale,color,width);return}
+  panelBoxesFor(W,H).forEach((b,i)=>{const e=frameEdgeCoords(b,W,H);line(x,e.l,e.t,e.r,e.t,701+i*11,widthScale,color,width);line(x,e.r,e.t,e.r,e.b,702+i*11,widthScale,color,width);line(x,e.r,e.b,e.l,e.b,703+i*11,widthScale,color,width);line(x,e.l,e.b,e.l,e.t,704+i*11,widthScale,color,width)})
+}
+function drawArtFrames(){const c=q('#artFrameCanvas');if(!c)return;const r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=Math.max(1,Math.round(r.width*d));c.height=Math.max(1,Math.round(r.height*d));const x=c.getContext('2d');x.scale(d,d);drawCutFrameSet(x,r.width,r.height,+q('#width').value,outerFrameStyle.color,1)}function render(){`,
+    'frame spacing');
+
+  must("function drawNormalizedFour(ctx,W,H){\n  drawEdit();\n  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);\n  // V29: the imported 4:5 image is one coordinate system. Never crop CUT 1–4 separately.\n  // Scaling the full 1080×1350 source once prevents the lower edge of CUT 3/4 captions from being lost.\n  ctx.drawImage(EC,0,0,EC.width,EC.height,0,0,W,H);\n}",
+`function normalizeFrameLanes(ctx,W,H){
+  if(mode!=='four')return;
+  const x0=W*(533/1080),gx=W*(14/1080),y0=H*(668/1350),gy=H*(14/1350);
+  ctx.save();ctx.fillStyle='#F8F7F5';
+  ctx.fillRect(x0,0,gx,H);
+  ctx.fillRect(0,y0,W,gy);
+  ctx.restore()
+}
+function drawNormalizedFour(ctx,W,H){
+  drawEdit();ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+  ctx.drawImage(EC,0,0,EC.width,EC.height,0,0,W,H);
+  normalizeFrameLanes(ctx,W,H)
+}`,
+    'frame lanes');
+
+  mustRe(/  if\(includeFrame\)\{\n    const ar=q\('#artArea'\)[\s\S]*?    x\.restore\(\)\n  \}\n  return out/,
+`  if(includeFrame){
+    // V66: 4:5 PNG stroke width is measured in output pixels, never mobile CSS pixels.
+    // This keeps the canonical 14px gutters visibly open even at the thinnest setting.
+    drawCutFrameSet(x,out.width,out.height,cutFrameStyle.width,cutFrameStyle.color,.75)
+  }
+  return out`,
+    '4x5 export frame');
+
+  const controlAnchor="q('#stripOldFrames').onchange=()=>{};";
+  must(controlAnchor,
+`q('#cutFrameWidth').oninput=e=>{cutFrameStyle.width=+e.target.value;q('#cutFrameWidthOut').textContent=cutFrameStyle.width.toFixed(1);if(last45Canvas){last45Canvas=renderProcessed45(true);q('#savedImage').src=last45Canvas.toDataURL('image/png',1)}};
+q('#cutFrameColor').oninput=e=>{cutFrameStyle.color=e.target.value;if(last45Canvas){last45Canvas=renderProcessed45(true);q('#savedImage').src=last45Canvas.toDataURL('image/png',1)}};
+${controlAnchor}`,
+    '4x5 frame handlers');
+
+  must("const outerItems=[{label:'상단 왼쪽',target:'frameHeaderL',text:'',size:18,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},{label:'상단 오른쪽',target:'frameHeaderR',text:'',size:16,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},{label:'하단 기록',target:'frameNote',text:'',size:18,spacing:0,lineHeight:1.5,color:'#191816',x:50,y:50,font:'Pretendard'}];",
+`const outerItems=[
+{label:'CUT 1 새 지문',target:'frameCut1',text:'',size:11,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'CUT 2 새 지문',target:'frameCut2',text:'',size:11,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'CUT 3 새 지문',target:'frameCut3',text:'',size:11,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'CUT 4 새 지문',target:'frameCut4',text:'',size:11,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'상단 왼쪽',target:'frameHeaderL',text:'',size:18,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'상단 오른쪽',target:'frameHeaderR',text:'',size:16,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'하단 기록',target:'frameNote',text:'',size:18,spacing:0,lineHeight:1.5,color:'#191816',x:50,y:50,font:'Pretendard'}];`,
+    'independent top captions');
+
+  h=h.replace("q('#outerFontStatus').textContent='현재 선택한 폰트를 상단 2칸 + 하단 기록 3칸에 동일 적용했습니다. 크기·자간·행간·색상·위치는 각각 유지됩니다.';",
+              "q('#outerFontStatus').textContent='현재 선택한 폰트를 CUT 1~4 + 상단 2칸 + 하단 기록에 동일 적용했습니다. 크기·자간·행간·색상·위치는 각각 유지됩니다.';");
+
+  must("function setFrameColor(value,save=true){const v=value||'#302e2a';outerFrameStyle.color=v;const top=q('#frameColorTop'),later=q('#outerFrameColor'),hex=q('#frameColorHex');if(top&&top.value!==v)top.value=v;if(later&&later.value!==v)later.value=v;if(hex)hex.textContent=v.toLowerCase();if(save)localStorage.setItem('dayframeInk.frameColor',v);const placed=q('#placedCanvas'),wasPlaced=!!(placed&&placed.style.display==='block'&&resultImg);if(wasPlaced){placedSnapshot=renderProcessed45(true);delete placed.dataset.snapshotReady;drawPlacedArt()}else{placedSnapshot=null;if(placed)delete placed.dataset.snapshotReady}render()}",
+    "function setFrameColor(value,save=true){const v=value||'#302e2a';outerFrameStyle.color=v;const top=q('#frameColorTop'),later=q('#outerFrameColor'),hex=q('#frameColorHex');if(top&&top.value!==v)top.value=v;if(later&&later.value!==v)later.value=v;if(hex)hex.textContent=v.toLowerCase();if(save)localStorage.setItem('dayframeInk.frameColor',v);render()}",
+    'single frame layer');
+
+  must("const parents=[q('.header .box:first-child'),q('.header .box:last-child'),q('.note')];",
+    "const parents=[q('.artCaptionCell.ac1'),q('.artCaptionCell.ac2'),q('.artCaptionCell.ac3'),q('.artCaptionCell.ac4'),q('.header .box:first-child'),q('.header .box:last-child'),q('.note')];",
+    'export caption parents');
+
+  must("q('#placeInFrame').onclick=()=>{if(!resultImg)return alert('생성 이미지를 먼저 가져와 주세요.');drawEdit();if(mode==='four'&&q('#stripOldFrames').checked&&!autoGrid)autoGrid=detectGrid();placedSnapshot=renderProcessed45(false);const c=q('#placedCanvas');c.removeAttribute('src');delete c.dataset.snapshotReady;drawPlacedArt();c.style.display='block';q('#artFrameCanvas').style.display='block';drawArtFrames();q('#artGhost').hidden=true;q('#artGhost').style.display='none';parkEditorPreview();q('#outerEditor').hidden=false;if(!outerItems[2].text)outerItems[2].text=q('#diary').value.trim();syncOuter();updateGuides();q('#editStatus').textContent='현재 4:5 결과는 이미지 한 장으로 고정하고, 긴 Dayframe의 Ink 선은 별도 전용 레이어로 유지했습니다. ‘기본 굵기’와 선 색을 바꾸면 상단 2칸·가운데 그림·하단 기록칸이 함께 갱신됩니다.';q('#outerEditor').scrollIntoView({behavior:'auto',block:'nearest'})};",
+`function renderTopArtBase(){
+  const out=document.createElement('canvas');out.width=1080;out.height=1350;const x=out.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,1080,1350);
+  // Use the imported illustration at exactly 1080×1350; do not crop or shift it.
+  x.drawImage(resultImg,0,0,resultImg.naturalWidth||resultImg.width,resultImg.naturalHeight||resultImg.height,0,0,1080,1350);
+  // The upper Dayframe owns its own CUT captions. Remove the imported/generated
+  // caption contents only inside the four canonical 147px caption cells.
+  fixedCaptionBoxes(1080,1350).forEach(b=>{x.fillStyle='#F8F7F5';x.fillRect(b.x,b.y,b.w,b.h)});
+  normalizeFrameLanes(x,1080,1350);return out
+}
+q('#placeInFrame').onclick=()=>{if(!resultImg)return alert('생성 이미지를 먼저 가져와 주세요.');if(mode==='four'&&q('#stripOldFrames').checked&&!autoGrid)autoGrid=detectGrid();
+  placedSnapshot=renderTopArtBase();
+  for(let i=0;i<4;i++)outerItems[i].text='';
+  activeOuter=0;
+  const c=q('#placedCanvas');c.removeAttribute('src');delete c.dataset.snapshotReady;drawPlacedArt();c.style.display='block';q('#artFrameCanvas').style.display='block';drawArtFrames();q('#artGhost').hidden=true;q('#artGhost').style.display='none';parkEditorPreview();q('#outerEditor').hidden=false;
+  if(!outerItems[6].text)outerItems[6].text=q('#diary').value.trim();
+  syncOuter();updateGuides();
+  requestAnimationFrame(()=>{const ar=q('#artArea').getBoundingClientRect(),ir=c.getBoundingClientRect(),root=document.documentElement,ok=Math.abs(ar.left-ir.left)<.75&&Math.abs(ar.width-ir.width)<.75&&root.scrollWidth<=root.clientWidth+1;q('#editStatus').textContent=(ok?'✓ ':'⚠️ ')+'위 Dayframe에는 4:5 지문을 복사하지 않고 빈 지문란으로 올렸습니다. CUT 1~4 새 지문을 입력하세요. 4:5 원래 규격의 14px 자동 여백을 그대로 유지하며, 위 Dayframe의 CUT 지문은 별도로 새로 입력합니다.'});
+  q('#outerEditor').scrollIntoView({behavior:'auto',block:'nearest'})
+};`,
+    'independent placement');
+
+  h=h.replace('// V59: the central artwork is one flattened <img> containing its Ink frame.\n  // Never draw a second artFrameCanvas over it.',
+              '// V66: placedCanvas is blank-caption content; artFrameCanvas is the single long-Dayframe Ink layer; CUT text is a separate overlay.');
+  h=h.replace("q('#downloadFinalFrame').onclick=()=>{if(!lastFinalCanvas)lastFinalCanvas=renderFinalFrame();downloadCanvas(lastFinalCanvas,'dayframe-ink-complete.png')}",
+              "q('#downloadFinalFrame').onclick=()=>{lastFinalCanvas=renderFinalFrame();downloadCanvas(lastFinalCanvas,'dayframe-ink-complete.png')}");
+
+  h=h.replace('</body>',`<script>(function(){function qa(){var r=document.documentElement;if(r.scrollWidth>r.clientWidth+1){document.querySelectorAll('.wf,.instapanel,.outerEditor,.editgrid,.finalexport').forEach(function(e){e.style.maxWidth='100%';e.style.minWidth='0'});document.querySelectorAll('.saveimg,.instaPreview,#savedImage,#finalFrameImage,#instagramPreview').forEach(function(e){e.style.width='100%';e.style.maxWidth='100%';e.style.height='auto'})}}addEventListener('resize',qa);new MutationObserver(qa).observe(document.body,{subtree:true,attributes:true,attributeFilter:['hidden','src','style']});setTimeout(qa,0)})();<\/script></body>`);
+
+  const sm=h.match(/<script>([\s\S]*?)<\/script>/);
+  if(!sm)throw new Error('V66 main script missing');
+  new Function(sm[1]);
+  document.open();document.write(h);document.close();
+})().catch(err=>{document.body.innerHTML='<pre style="white-space:pre-wrap;padding:20px;font:13px/1.5 sans-serif">Dayframe Ink V66 로드 실패\n'+String(err&&err.message||err)+'</pre>'})
+</script></body></html>
