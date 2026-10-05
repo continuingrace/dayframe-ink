@@ -13,7 +13,7 @@
 
   must(
 `    // V67: 4:5 PNG stroke width is measured in output pixels, never mobile CSS pixels.\n    // This keeps the canonical 14px gutters visibly open even at the thinnest setting.\n    drawCutFrameSet(x,out.width,out.height,cutFrameStyle.width,cutFrameStyle.color,.75)`,
-`    // V67 stabilization: the slider keeps the original on-screen V3 visual scale.\n    // 1080px output is about 3x the editor preview width, so scale only the width, never the texture math.\n    drawCutFrameSet(x,out.width,out.height,cutFrameStyle.width*3,cutFrameStyle.color,1)`,
+`    // V67 stabilization: restore the original V3 drawing scale so both thickness and\n    // the coarse hand-ink texture match the approved pre-regression appearance.\n    const ar=q('#artArea').getBoundingClientRect(),vrW=ar.width||360,vrH=ar.height||450,sx=out.width/vrW,sy=out.height/vrH;\n    x.save();x.scale(sx,sy);drawCutFrameSet(x,vrW,vrH,cutFrameStyle.width,cutFrameStyle.color,1);x.restore()`,
   '4x5 stroke scale');
 
   must(
