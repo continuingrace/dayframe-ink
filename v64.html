@@ -1,0 +1,101 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Dayframe Ink V64</title></head><body><script>
+(async()=>{
+  const res=await fetch('./base-v59.html?v=64-base',{cache:'no-store'});
+  if(!res.ok)throw new Error('V64 base fetch failed: '+res.status);
+  let h=await res.text();
+  const must=(from,to,label)=>{if(!h.includes(from))throw new Error('V64 patch target missing: '+label);h=h.replace(from,to)};
+  const mustRe=(re,to,label)=>{const before=h;h=h.replace(re,to);if(h===before)throw new Error('V64 patch target missing: '+label)};
+
+  must('<span class="ver">V59</span>','<span class="ver">V64</span>','version');
+  h=h.replaceAll('Ink V59 프롬프트 만들기','Ink V64 프롬프트 만들기').replaceAll('DAYFRAME INK — V59 IMAGE PROMPT','DAYFRAME INK — V64 IMAGE PROMPT');
+
+  must('.art{height:auto;aspect-ratio:4/5;overflow:hidden;background:#fff}.placedCanvas{position:absolute;inset:0;width:100%;height:100%;display:none;z-index:1;background:#fff;object-fit:fill;pointer-events:none}',
+    '.art{height:auto;aspect-ratio:4/5;overflow:hidden;background:#fff;width:100%;min-width:0;max-width:100%}.placedCanvas{position:absolute;inset:0;width:100%!important;height:100%!important;min-width:0!important;max-width:100%!important;display:none;z-index:1;background:#f8f7f5;object-fit:fill!important;object-position:0 0!important;pointer-events:none;transform:none!important;margin:0!important;padding:0!important;border:0!important;box-sizing:border-box!important}',
+    'placed geometry');
+
+  h=h.replace('</style>',`\n/* V64: one responsive coordinate system. No screen.width JS and no intrinsic media expansion. */
+html,body{width:100%;max-width:100%;overflow-x:clip}
+.wrap{width:100%;max-width:760px;margin-left:auto;margin-right:auto;box-sizing:border-box}
+#artArea{width:100%;max-width:100%;min-width:0}
+.workflow,.wf,.editgrid,.preview,.instapanel,.outerEditor,.typepanel,.legacyframe,.guidepanel,.outerframepanel,.finalexport,.minirow,.row,.framecolorcontrol{min-width:0}
+.saveimg,.instaPreview,#savedImage,#finalFrameImage,#instagramPreview{display:block;width:100%!important;max-width:100%!important;height:auto!important;object-fit:contain}
+.action,button,textarea,input{min-width:0;max-width:100%}
+.hint,.status,.outputnote{overflow-wrap:anywhere}
+@media(max-width:600px){
+  .wrap{width:100%!important;max-width:100%!important;margin:0 auto!important}
+  .card,.paper,.art,.workflow,.wf,.editgrid,.instapanel,.outerEditor,.typepanel,.legacyframe,.guidepanel,.outerframepanel,.finalexport{width:100%;max-width:100%;min-width:0}
+  .wf,.instapanel,.outerEditor{overflow-x:clip}
+  .minirow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .row{grid-template-columns:104px minmax(0,1fr) 45px}
+  .framecolorcontrol{grid-template-columns:104px 52px minmax(0,1fr)}
+}
+</style>`);
+
+  must('<div class="outputnote"><strong>두 결과를 모두 만들 수 있어요.</strong><br>① 위 Dayframe 그림영역에 넣기 · ② 지문이 들어간 4:5 이미지 자체 산출</div><div class="legacyframe">',
+    '<div class="outputnote"><strong>두 결과를 모두 만들 수 있어요.</strong><br>① 위 Dayframe 그림영역에 넣기 · ② 지문이 들어간 4:5 이미지 자체 산출</div><div class="typepanel" id="cutFramePanel"><p class="typepanel-title">4:5 그림 CUT 테두리</p><p class="hint">생성 이미지를 가져온 뒤에도 CUT 1~4 Ink 선의 굵기와 색을 조절합니다. 원본 그림 크기와 위치는 바꾸지 않습니다.</p><div class="minirow"><label class="range">선 굵기 <span id="cutFrameWidthOut">5.1</span><input id="cutFrameWidth" type="range" min="2.5" max="8" step=".1" value="5.1"></label><label class="range colorrow">선 색<span class="colorwell"><input id="cutFrameColor" type="color" value="#302e2a"></span></label></div></div><div class="legacyframe">',
+    '4x5 frame controls');
+
+  must("const EC=q('#editCanvas'),EX=EC.getContext('2d');let resultImg=null,editItems=[],activeEdit=0;",
+    "const cutFrameStyle={width:5.1,color:'#302e2a'};const EC=q('#editCanvas'),EX=EC.getContext('2d');let resultImg=null,editItems=[],activeEdit=0;",
+    '4x5 frame state');
+
+  /* Keep the approved V3 line texture; only change where the line is drawn. */
+  mustRe(/function drawArtFrames\(\)\{[\s\S]*?\}function render\(\)\{/,
+`function frameEdgeCoords(b,W,H,p=3){const eps=.75,l=b.x,t=b.y,r=b.x+b.w,bt=b.y+b.h;return{l:l<=eps?l+p:l,t:t<=eps?t+p:t,r:r>=W-eps?r-p:r,b:bt>=H-eps?bt-p:bt}}
+function drawCutFrameSet(x,W,H,width,color,widthScale=1){
+  if(mode!=='four'){const p=3;line(x,p,p,W-p,p,701,widthScale,color,width);line(x,W-p,p,W-p,H-p,702,widthScale,color,width);line(x,W-p,H-p,p,H-p,703,widthScale,color,width);line(x,p,H-p,p,p,704,widthScale,color,width);return}
+  panelBoxesFor(W,H).forEach((b,i)=>{const e=frameEdgeCoords(b,W,H,3);line(x,e.l,e.t,e.r,e.t,701+i*11,widthScale,color,width);line(x,e.r,e.t,e.r,e.b,702+i*11,widthScale,color,width);line(x,e.r,e.b,e.l,e.b,703+i*11,widthScale,color,width);line(x,e.l,e.b,e.l,e.t,704+i*11,widthScale,color,width)})
+}
+function drawArtFrames(){const c=q('#artFrameCanvas');if(!c)return;const r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=Math.max(1,Math.round(r.width*d));c.height=Math.max(1,Math.round(r.height*d));const x=c.getContext('2d');x.scale(d,d);drawCutFrameSet(x,r.width,r.height,+q('#width').value,outerFrameStyle.color,1)}function render(){`,
+    'frame coordinates');
+
+  /* Technical gutters are owned by Dayframe, not by the generated artwork. This removes any leaked scene pixels or old stroke remnants only inside the canonical 14px gutters. */
+  must("function drawNormalizedFour(ctx,W,H){\n  drawEdit();\n  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);\n  // V29: the imported 4:5 image is one coordinate system. Never crop CUT 1–4 separately.\n  // Scaling the full 1080×1350 source once prevents the lower edge of CUT 3/4 captions from being lost.\n  ctx.drawImage(EC,0,0,EC.width,EC.height,0,0,W,H);\n}",
+`function normalizeCanonicalGutters(ctx,W,H){
+  if(mode!=='four')return;
+  const gx=W*(14/1080),gy=H*(14/1350),x0=W*(533/1080),y0=H*(668/1350);
+  ctx.save();ctx.fillStyle='#F8F7F5';ctx.fillRect(x0,0,gx,H);ctx.fillRect(0,y0,W,gy);ctx.restore()
+}
+function drawNormalizedFour(ctx,W,H){
+  drawEdit();ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+  ctx.drawImage(EC,0,0,EC.width,EC.height,0,0,W,H);
+  normalizeCanonicalGutters(ctx,W,H)
+}`,
+    'canonical gutter normalization');
+
+  mustRe(/  if\(includeFrame\)\{\n    const ar=q\('#artArea'\)[\s\S]*?    x\.restore\(\)\n  \}\n  return out/,
+`  if(includeFrame){
+    const ar=q('#artArea').getBoundingClientRect(),vrW=ar.width||360,vrH=ar.height||450,sx=out.width/vrW,sy=out.height/vrH;
+    x.save();x.scale(sx,sy);drawCutFrameSet(x,vrW,vrH,cutFrameStyle.width,cutFrameStyle.color,.75);x.restore()
+  }
+  return out`,
+    '4x5 export frame');
+
+  const controlAnchor="q('#stripOldFrames').onchange=()=>{};";
+  must(controlAnchor,
+`q('#cutFrameWidth').oninput=e=>{cutFrameStyle.width=+e.target.value;q('#cutFrameWidthOut').textContent=cutFrameStyle.width.toFixed(1);if(last45Canvas){last45Canvas=renderProcessed45(true);q('#savedImage').src=last45Canvas.toDataURL('image/png',1)}};
+q('#cutFrameColor').oninput=e=>{cutFrameStyle.color=e.target.value;if(last45Canvas){last45Canvas=renderProcessed45(true);q('#savedImage').src=last45Canvas.toDataURL('image/png',1)}};
+${controlAnchor}`,
+    '4x5 frame handlers');
+
+  must("function setFrameColor(value,save=true){const v=value||'#302e2a';outerFrameStyle.color=v;const top=q('#frameColorTop'),later=q('#outerFrameColor'),hex=q('#frameColorHex');if(top&&top.value!==v)top.value=v;if(later&&later.value!==v)later.value=v;if(hex)hex.textContent=v.toLowerCase();if(save)localStorage.setItem('dayframeInk.frameColor',v);const placed=q('#placedCanvas'),wasPlaced=!!(placed&&placed.style.display==='block'&&resultImg);if(wasPlaced){placedSnapshot=renderProcessed45(true);delete placed.dataset.snapshotReady;drawPlacedArt()}else{placedSnapshot=null;if(placed)delete placed.dataset.snapshotReady}render()}\nq('#frameColorTop').oninput=e=>setFrameColor(e.target.value);\nq('#outerFrameColor').oninput=e=>setFrameColor(e.target.value);",
+    "function setFrameColor(value,save=true){const v=value||'#302e2a';outerFrameStyle.color=v;const top=q('#frameColorTop'),later=q('#outerFrameColor'),hex=q('#frameColorHex');if(top&&top.value!==v)top.value=v;if(later&&later.value!==v)later.value=v;if(hex)hex.textContent=v.toLowerCase();if(save)localStorage.setItem('dayframeInk.frameColor',v);render()}\nq('#frameColorTop').oninput=e=>setFrameColor(e.target.value);\nq('#outerFrameColor').oninput=e=>setFrameColor(e.target.value);",
+    'no rebaked long-frame stroke');
+
+  must("q('#placeInFrame').onclick=()=>{if(!resultImg)return alert('생성 이미지를 먼저 가져와 주세요.');drawEdit();if(mode==='four'&&q('#stripOldFrames').checked&&!autoGrid)autoGrid=detectGrid();placedSnapshot=renderProcessed45(false);const c=q('#placedCanvas');c.removeAttribute('src');delete c.dataset.snapshotReady;drawPlacedArt();c.style.display='block';q('#artFrameCanvas').style.display='block';drawArtFrames();q('#artGhost').hidden=true;q('#artGhost').style.display='none';parkEditorPreview();q('#outerEditor').hidden=false;if(!outerItems[2].text)outerItems[2].text=q('#diary').value.trim();syncOuter();updateGuides();q('#editStatus').textContent='현재 4:5 결과는 이미지 한 장으로 고정하고, 긴 Dayframe의 Ink 선은 별도 전용 레이어로 유지했습니다. ‘기본 굵기’와 선 색을 바꾸면 상단 2칸·가운데 그림·하단 기록칸이 함께 갱신됩니다.';q('#outerEditor').scrollIntoView({behavior:'auto',block:'nearest'})};",
+`q('#placeInFrame').onclick=()=>{if(!resultImg)return alert('생성 이미지를 먼저 가져와 주세요.');drawEdit();if(mode==='four'&&q('#stripOldFrames').checked&&!autoGrid)autoGrid=detectGrid();placedSnapshot=renderProcessed45(false);const c=q('#placedCanvas');c.removeAttribute('src');delete c.dataset.snapshotReady;drawPlacedArt();c.style.display='block';q('#artFrameCanvas').style.display='block';drawArtFrames();q('#artGhost').hidden=true;q('#artGhost').style.display='none';parkEditorPreview();q('#outerEditor').hidden=false;if(!outerItems[2].text)outerItems[2].text=q('#diary').value.trim();syncOuter();updateGuides();requestAnimationFrame(()=>{const ar=q('#artArea').getBoundingClientRect(),ir=c.getBoundingClientRect(),root=document.documentElement,ok=Math.abs(ar.left-ir.left)<.75&&Math.abs(ar.width-ir.width)<.75&&root.scrollWidth<=root.clientWidth+1;q('#editStatus').textContent=(ok?'✓ ':'⚠️ ')+'배치 폭 '+ar.width.toFixed(1)+' / 이미지 '+ir.width.toFixed(1)+' / X차이 '+(ir.left-ar.left).toFixed(1)+' / 페이지 '+root.clientWidth+'→'+root.scrollWidth+' · 14px 거터는 #F8F7F5로 정리 후 Ink 선을 실제 CUT 경계에 그립니다.'});q('#outerEditor').scrollIntoView({behavior:'auto',block:'nearest'})};`,
+    'placement QA');
+
+  /* Final export: content once + Ink canvas once. */
+  h=h.replace('// V59: the central artwork is one flattened <img> containing its Ink frame.\n  // Never draw a second artFrameCanvas over it.','// V64: placedCanvas is borderless content; artFrameCanvas is the single long-Dayframe Ink layer.');
+  h=h.replace("q('#downloadFinalFrame').onclick=()=>{if(!lastFinalCanvas)lastFinalCanvas=renderFinalFrame();downloadCanvas(lastFinalCanvas,'dayframe-ink-complete.png')}","q('#downloadFinalFrame').onclick=()=>{lastFinalCanvas=renderFinalFrame();downloadCanvas(lastFinalCanvas,'dayframe-ink-complete.png')}");
+
+  /* Run-time mobile overflow guard after large PNG previews are revealed. It never changes art coordinates. */
+  h=h.replace('</body>',`<script>(function(){function qa(){var r=document.documentElement;if(r.scrollWidth>r.clientWidth+1){document.querySelectorAll('.wf,.instapanel,.outerEditor,.editgrid,.finalexport').forEach(function(e){e.style.maxWidth='100%';e.style.minWidth='0'});document.querySelectorAll('.saveimg,.instaPreview,#savedImage,#finalFrameImage,#instagramPreview').forEach(function(e){e.style.width='100%';e.style.maxWidth='100%';e.style.height='auto'})}}addEventListener('resize',qa);new MutationObserver(qa).observe(document.body,{subtree:true,attributes:true,attributeFilter:['hidden','src','style']});setTimeout(qa,0)})();<\/script></body>`);
+
+  const sm=h.match(/<script>([\s\S]*?)<\/script>/);
+  if(!sm)throw new Error('V64 main script missing');
+  new Function(sm[1]);
+  document.open();document.write(h);document.close();
+})().catch(err=>{document.body.innerHTML='<pre style="white-space:pre-wrap;padding:20px;font:13px/1.5 sans-serif">Dayframe Ink V64 로드 실패\n'+String(err&&err.message||err)+'</pre>'})
+</script></body></html>
