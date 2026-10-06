@@ -1,0 +1,37 @@
+name: Materialize Dayframe Ink V71
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'materialize-v71.mjs'
+      - '.github/workflows/materialize-v71.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Materialize static V71
+        run: node materialize-v71.mjs
+      - name: Verify V71 invariants
+        run: |
+          grep -q 'V71 STATIC BUILD' v71.html
+          grep -q 'id="resetToday"' v71.html
+          grep -q 'legacyExtra' v71.html
+          ! grep -q 'DAYFRAME INK — V70 IMAGE PROMPT' v71.html
+          ! grep -q "fetch('./base-v59.html" v71.html
+          ! grep -q "fetch('./v66.html" v71.html
+      - name: Commit static V71
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add v71.html index.html
+          git commit -m "Publish Dayframe Ink V71 with safe daily reset"
+          git push
