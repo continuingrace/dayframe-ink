@@ -11,7 +11,7 @@ must(`  const n=q('#name').value.trim()||'MY CHARACTER',extra=q('#notes').value.
 
 must(`['name','notes','diary','dailyLook','dailyPlace','exactPlaceText','cutDirection'].forEach(id=>q('#'+id).oninput=()=>localStorage.setItem('dayframeInk.'+id,q('#'+id).value));`,`['name','notes','diary','dailyLook','dailyPlace','exactPlaceText','cutDirection'].forEach(id=>q('#'+id).oninput=()=>localStorage.setItem('dayframeInk.'+id,q('#'+id).value));
 q('#resetToday').onclick=()=>{
-  if(!confirm('오늘의 기록·의상·장소·장소 글자·CUT 방향·오늘 참고 이미지만 비우고 새 기록을 시작할까요?\n\n캐릭터 정체성 이미지, 승인 스타일 이미지, IMG_9121 옆모습 기준, 이름과 고정 정체성 메모는 유지됩니다.'))return;
+  if(!confirm('오늘 입력값과 오늘 참고 이미지만 비우고 새 기록을 시작할까요? 캐릭터 정체성·승인 스타일·IMG_9121 기준·이름·고정 정체성 메모는 유지됩니다.'))return;
   archivePrompt(q('#prompt').value);
   ['diary','dailyLook','dailyPlace','exactPlaceText','cutDirection'].forEach(id=>{q('#'+id).value='';localStorage.removeItem('dayframeInk.'+id)});
   dailyRefs.length=0;renderDailyRefs();saveDailyRefs();q('#dailyRefs').value='';
