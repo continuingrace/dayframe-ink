@@ -1,0 +1,38 @@
+name: Materialize Dayframe Ink V73
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'materialize-v73.mjs'
+      - '.github/workflows/materialize-v73.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Materialize static V73
+        run: node materialize-v73.mjs
+      - name: Verify V73 isolated fix
+        run: |
+          grep -q 'V73 STATIC BUILD' v73.html
+          grep -q 'maskOutsideCutFrames' v73.html
+          grep -q 'export the text from the exact DOM layout' v73.html
+          grep -q 'id="resetToday"' v73.html
+          grep -q 'function renderTopArtBase' v73.html
+          ! grep -q "fetch('./base-v59.html" v73.html
+          ! grep -q "fetch('./v66.html" v73.html
+      - name: Commit static V73
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add v73.html index.html
+          git commit -m "Publish Dayframe Ink V73 isolated 4x5 frame clipping"
+          git push
