@@ -1,0 +1,43 @@
+name: Materialize Dayframe Ink V75
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'materialize-v75.mjs'
+      - '.github/workflows/materialize-v75.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Materialize static V75
+        run: node materialize-v75.mjs
+      - name: Verify V75 surgical caption fix
+        run: |
+          grep -q 'V75 STATIC BUILD' v75.html
+          grep -q 'maxY=Math.max(minY,b.y+b.h-bottomPad-t.size)' v75.html
+          ! grep -q 'maxY=Math.max(minY,b.y+b.h-bottomPad-blockH)' v75.html
+          grep -q 'function localPos(i,t)' v75.html
+          grep -q 'function setLocalPos(i,t,lx,ly)' v75.html
+          grep -q '모든 CUT의 중심 X와 첫 줄 상단 Y를 같은 지문란 좌표로 맞췄습니다.' v75.html
+          grep -q 'maskOutsideCutFrames' v75.html
+          grep -q 'export the text from the exact DOM layout' v75.html
+          grep -q '고정 이미지 가이드 v2.4' v75.html
+          grep -q 'function renderTopArtBase' v75.html
+          ! grep -q "fetch('./base-v59.html" v75.html
+          ! grep -q "fetch('./v66.html" v75.html
+      - name: Commit static V75
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add v75.html index.html
+          git commit -m "Publish Dayframe Ink V75 CUT caption Y fix"
+          git push
