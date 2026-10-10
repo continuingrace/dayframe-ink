@@ -1,0 +1,827 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f4f0e7"><title>Dayframe Ink</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f4f0e7;color:#191816;font-family:-apple-system,BlinkMacSystemFont,"Pretendard",sans-serif}.wrap{max-width:760px;margin:auto;padding:22px 18px 64px}.head{display:flex;justify-content:space-between;align-items:end;margin-bottom:18px}.eyebrow{font-size:10px;letter-spacing:.15em;color:#777;margin:0 0 4px}.head h1{font-size:23px;margin:0}.ver{font-size:12px;padding:6px 9px;background:#e7e1d6;border-radius:99px}.card{background:#fffdf8;border-radius:24px;padding:17px;box-shadow:0 10px 32px #3c33230d}.paper{background:#fff;padding:15px;border-radius:5px}.header{display:grid;grid-template-columns:1.4fr .8fr;gap:10px;margin-bottom:11px}.box{height:38px;position:relative;overflow:hidden}.art{height:360px;position:relative;margin-bottom:11px;background:#fdfdfb}.ghost{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:13px}.note{height:160px;position:relative;padding:18px 0;overflow:hidden}.guide{box-sizing:border-box}.guide{position:absolute;left:16px;right:16px;height:1px;background:#625f58;opacity:.56}.g1{top:40px}.g2{top:80px}.g3{top:120px}.paper canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.controls{display:grid;gap:13px;margin-top:18px}.row{display:grid;grid-template-columns:104px 1fr 45px;gap:10px;align-items:center}.row label{font-size:12px;font-weight:650}.row output{font-size:11px;color:#777;text-align:right}input{width:100%}.desc{font-size:12px;color:#777;line-height:1.6;margin:16px 2px 0}.swatch{display:inline-flex;align-items:center;gap:7px;margin-top:12px;font-size:11px;color:#666}.dot{width:14px;height:14px;border-radius:50%;background:#302e2a;border:1px solid #ddd}
+.workflow{display:grid;gap:14px;margin-top:18px}.wf{background:#fffdf8;border-radius:20px;padding:18px}.wf h2{font-size:17px;margin:0 0 12px}.upload{border:1px dashed #aaa69b;border-radius:15px;padding:22px;text-align:center;display:block}.upload input{display:none}.thumbs{display:flex;gap:8px;overflow:auto;margin-top:10px}.thumbs .thumb{position:relative;flex:0 0 68px;width:68px;height:68px}.thumbs img{width:68px;height:68px;object-fit:cover;border-radius:10px;display:block}.thumbs .delref{position:absolute;right:-4px;top:-4px;width:24px;height:24px;border:0;border-radius:50%;background:#191816;color:white;font-size:15px;line-height:24px;padding:0;box-shadow:0 2px 8px #0002}.refactions{display:flex;justify-content:flex-end;margin-top:8px}.refactions button{border:0;background:transparent;color:#777;font-size:11px;padding:5px}.refblock{margin-top:14px;padding:13px;border:1px solid #e2ddd3;border-radius:15px;background:#faf8f2}.refblock h3{font-size:13px;margin:0 0 5px}.refblock .hint{margin:0 0 10px}.styleguide{min-height:360px;font-size:11px;line-height:1.55;background:#f8f6f0}.attachnotice{margin-top:10px;padding:11px 12px;border-radius:12px;background:#f0ede5;font-size:11px;line-height:1.55;color:#5d5951}.vargrid{display:grid;gap:8px;margin-top:12px}
+.setupwf{padding:22px 20px}.setupwf h2{margin:0 0 20px;line-height:1.35}.setupwf>h2+.label{margin-top:0}.setupwf>.label{margin-top:22px;margin-bottom:9px;line-height:1.45}.setupwf>.label+.upload{margin-top:0}.setupwf>.refblock{margin-top:24px;padding:17px 16px}.setupwf .refblock h3{margin:0 0 8px;line-height:1.45}.setupwf .refblock .hint{margin:0 0 14px;line-height:1.65}.setupwf .refblock .upload{margin-top:12px}.setupwf .refactions{margin-top:10px;margin-bottom:2px}.setupwf .identitylock{margin-top:10px;padding:14px 15px}.setupwf .styleguide{margin-top:12px}.setupwf .vargrid{gap:14px;margin-top:18px}.setupwf .vargrid .label{margin:0 0 7px}.setupwf .vargrid .field{margin-top:0}.setupwf>.field{margin-top:0}.setupwf .attachnotice{margin:4px 0 14px;padding:13px 14px}.setupwf .prompt{margin-top:12px}
+.framecolorcontrol{display:grid;grid-template-columns:104px 52px 1fr;gap:10px;align-items:center;margin-top:14px}.framecolorcontrol>span:first-child{font-size:12px;font-weight:650}.framecolorcontrol .colorwell{margin:0;height:42px}.framecolorcontrol output{font-size:11px;color:#777;text-align:left}.framecolorcontrol input[type=color]{width:42px}
+@media(max-width:480px){.setupwf{padding:20px}.setupwf h2{margin-bottom:20px}.setupwf>.label{margin-top:22px}.setupwf>.refblock{margin-top:24px;padding:16px}.framecolorcontrol{grid-template-columns:104px 52px 1fr}}.field{width:100%;border:1px solid #d8d3c9;background:white;border-radius:12px;padding:13px;margin-top:9px;font:inherit}.area{min-height:150px;resize:vertical}.seg{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:10px}.seg button,.action{border:1px solid #25231f;background:#fffdf8;border-radius:11px;padding:12px;font-weight:700}.seg button.on,.action.primary{background:#191816;color:#fff}.action{width:100%;margin-top:10px}.prompt{min-height:310px;font-size:12px;line-height:1.55}.hint{font-size:11px;color:#777;line-height:1.55}.label{display:block;font-size:11px;font-weight:700;margin-top:13px}.editgrid{display:grid;gap:16px;margin-top:18px}.preview{background:#f4f0e7;border:1px solid #ddd7cc;border-radius:16px;padding:10px;position:relative;top:auto;z-index:1;box-shadow:0 8px 24px rgba(48,46,42,.08);display:flex;align-items:center;justify-content:center;max-height:48svh;overflow:hidden}.preview.placedDone{display:none!important;position:static!important;inset:auto!important;transform:none!important;box-shadow:none}.preview canvas{position:static!important;inset:auto!important;display:block;width:min(100%,calc((48svh - 20px)*.8));height:auto;max-width:100%;aspect-ratio:4/5;background:#fff;touch-action:none;margin:0 auto;flex:0 0 auto;transform:none!important}.minirow{display:grid;grid-template-columns:1fr 1fr;gap:9px}.range{display:grid;gap:6px;font-size:11px;margin-top:10px}.range input{width:100%}.status{font-size:11px;color:#777;margin-top:8px}.caption-tabs{display:flex;gap:6px;overflow:auto;margin:10px 0}.caption-tabs button{white-space:nowrap;border:1px solid #d8d3c9;background:white;border-radius:99px;padding:8px 11px}.caption-tabs button.on{background:#191816;color:white}.saveimg{width:100%;height:auto;display:block;margin-top:10px}.colorrow{align-content:start}.colorwell{display:flex;align-items:center;height:42px;margin-top:2px}.colorwell input[type=color]{-webkit-appearance:none;appearance:none;width:42px;height:42px;padding:0;border:1px solid #cbc5b9;border-radius:50%;background:transparent;overflow:hidden}.colorwell input[type=color]::-webkit-color-swatch-wrapper{padding:4px}.colorwell input[type=color]::-webkit-color-swatch{border:0;border-radius:50%}.colorwell input[type=color]::-moz-color-swatch{border:0;border-radius:50%}.pospad{display:grid;grid-template-columns:repeat(3,44px);gap:6px;justify-content:center;margin:12px auto}.pospad button,.nudge button{height:40px;border:1px solid #d8d3c9;background:#fff;border-radius:10px;font-size:16px}.pospad button.active{background:#191816;color:#fff}.nudge{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}.nudge button{font-size:14px}.position-note{text-align:center;font-size:11px;color:#777;margin:6px 0 0}.typepanel{border:1px solid #e1ddd4;border-radius:15px;padding:14px;margin-top:2px;background:#fff}.typepanel-title{font-size:12px;font-weight:750;margin:0 0 10px}.typepanel .upload{margin-top:0}.typepanel .action{margin-bottom:2px}@media(max-width:480px){.wf{padding:16px}.editgrid{gap:14px}.preview{position:static!important;inset:auto!important;top:auto!important;max-height:44svh;transform:none!important}.preview canvas{position:static!important;inset:auto!important;width:min(100%,calc((44svh - 20px)*.8));height:auto;transform:none!important}.minirow{gap:12px}}.identitylock{margin-top:8px;padding:12px 13px;border-radius:12px;background:#f4f1e9;font-size:12px;line-height:1.65;color:#4b4842}.identitylock strong{display:block;color:#191816;margin-bottom:3px}.importmode{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.importmode button{border:1px solid #d8d3c9;background:#fff;border-radius:11px;padding:10px 8px;font-size:11px;font-weight:700}.importmode button.on{background:#191816;color:#fff;border-color:#191816}
+/* V21 staged 4:5 editor → original Ink frame */
+.art{height:auto;aspect-ratio:4/5;overflow:hidden;background:#fff;width:100%;min-width:0;max-width:100%}.placedCanvas{position:absolute;inset:0;width:100%!important;height:100%!important;min-width:0!important;max-width:100%!important;display:none;z-index:1;background:#f8f7f5;object-fit:fill!important;object-position:0 0!important;pointer-events:none;transform:none!important;margin:0!important;padding:0!important;border:0!important;box-sizing:border-box!important}.art #artFrameCanvas{z-index:2}.art .ghost{z-index:3}.box .frameText,.note .frameNote{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);width:90%;max-width:90%;box-sizing:border-box;text-align:center;white-space:pre-wrap;overflow-wrap:anywhere;word-break:keep-all;overflow:visible;pointer-events:none}.outerEditor{margin-top:20px;padding-top:18px;border-top:1px solid #e7e1d6}.outerEditor h3{font-size:16px;margin:0 0 8px}.preview{position:static!important;inset:auto!important;transform:none!important}.preview canvas{position:static!important;inset:auto!important;aspect-ratio:4/5!important;transform:none!important}
+
+.legacyframe,.guidepanel,.outerframepanel{margin:14px 0;padding:13px;border:1px solid #e2ddd3;border-radius:14px;background:#faf8f2}.legacyframe>label:first-child,.legacycaption{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700}.legacyframe input[type=checkbox]{width:auto}.outerEditor{margin:16px 0 4px;padding:14px;border:1px solid #e2ddd3;border-radius:16px;background:#faf8f2}.outerEditor .caption-tabs{margin:12px 0}.outerEditor .typepanel{background:#fff}.legacyframe .action{margin-top:10px}.guidepanel .typepanel-title,.outerframepanel .typepanel-title{margin-top:0}
+
+.edittooltabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:2px 0 8px;padding:4px;background:#eee9df;border-radius:13px}.edittooltabs button{border:0;background:transparent;border-radius:10px;padding:10px 8px;font-size:12px;font-weight:750;color:#777}.edittooltabs button.on{background:#fff;color:#191816;box-shadow:0 1px 5px rgba(48,46,42,.09)}.edittoolpanel[hidden]{display:none!important}.positionpanel{margin:0;padding:12px 13px;border:1px solid #ddd7cc;border-radius:14px;background:#faf8f2;overscroll-behavior:contain}.positionhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}.positionhead strong{font-size:12px}.positionhead span{font-size:10px;color:#777;text-align:right}.positionpanel .range{margin-top:8px}.positionpanel input[type=range]{touch-action:none}.positionpanel .nudge{margin-top:10px}.positionpanel .pospad{margin:10px auto 2px}.positionpanel .position-note{margin-top:7px}.outputnote{margin:12px 0;padding:11px 12px;border-radius:12px;background:#f4f1e9;font-size:11px;line-height:1.6;color:#625f58}.outputnote strong{color:#191816}
+.finalexport{margin-top:14px;padding-top:14px;border-top:1px solid #e2ddd3}
+#download45[hidden],#downloadFinalFrame[hidden],#downloadInstagram[hidden],#instagramPanel[hidden]{display:none}.instapanel{margin-top:12px;padding:14px;border:1px solid #e2ddd3;border-radius:16px;background:#faf8f2}.instapanel h3{font-size:14px;margin:0 0 5px}.instapanel .hint{margin:0 0 8px}.instaPreview{width:100%;height:auto;display:block;margin-top:10px;border-radius:10px;background:#fff}
+.preview canvas,#instagramPreview{position:static!important;inset:auto!important;transform:none!important}
+#instagramPreview{display:block;max-width:100%;height:auto!important}
+#instagramPreview[hidden]{display:none!important}
+.ghost[hidden]{display:none!important}/* V59 mobile spacing QA — scoped to the new setup sections only.
+   This intentionally comes after the older mobile .wf rule so it cannot collapse
+   the setup cards back to 16px padding. Editor/export layout is untouched. */
+.wf.setupwf{padding:22px 20px}
+.setupwf h2{margin-bottom:22px}
+.setupwf>h2+.label{margin-top:0}
+.setupwf>.label{margin-top:26px;margin-bottom:10px}
+.setupwf>.label+.upload{margin-top:0}
+.setupwf>.refblock{margin-top:26px;padding:18px 17px}
+.setupwf .refblock h3{margin-bottom:9px}
+.setupwf .refblock .hint{margin-bottom:16px}
+.setupwf .refblock .upload{margin-top:0}
+.setupwf .refblock .refactions{margin-top:13px;margin-bottom:0;min-height:32px;align-items:center}
+.setupwf .refblock .refactions button{padding:7px 4px}
+.setupwf>.refblock+.label{margin-top:28px}
+.setupwf .identitylock{margin-top:0;padding:15px 16px}
+.setupwf .styleguide{margin-top:20px}
+.setupwf .vargrid{margin-top:20px;gap:16px}
+.setupwf .vargrid .label{margin-bottom:8px}
+.setupwf .attachnotice{margin-top:8px;margin-bottom:18px}
+.setupwf .prompt{margin-top:14px}
+@media(max-width:480px){
+  .wf.setupwf{padding:20px!important}
+  .setupwf h2{margin-bottom:22px}
+  .setupwf>.label{margin-top:24px;margin-bottom:10px}
+  .setupwf>.refblock{margin-top:24px;padding:17px 16px}
+  .setupwf>.refblock+.label{margin-top:26px}
+  .setupwf .styleguide{margin-top:20px}
+}
+
+/* V74 responsive · completed 4:5 captions preserved */
+.caption-tabs{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;overflow:visible!important}
+.caption-tabs button{width:100%!important;min-width:0!important;white-space:normal!important;line-height:1.2!important;padding:10px 7px!important}
+#outerTabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+@media(max-width:600px){.caption-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+html,body{width:100%;max-width:100%;overflow-x:clip}
+.wrap{width:100%;max-width:760px;margin-left:auto;margin-right:auto;box-sizing:border-box}
+#artArea{width:100%;max-width:100%;min-width:0}
+.workflow,.wf,.editgrid,.preview,.instapanel,.outerEditor,.typepanel,.legacyframe,.guidepanel,.outerframepanel,.finalexport,.minirow,.row,.framecolorcontrol{min-width:0}
+.saveimg,.instaPreview,#savedImage,#finalFrameImage,#instagramPreview{display:block;width:100%!important;max-width:100%!important;height:auto!important;object-fit:contain}
+.action,button,textarea,input{min-width:0;max-width:100%}
+.hint,.status,.outputnote{overflow-wrap:anywhere}
+.artCaptionCell{position:absolute;z-index:3;pointer-events:none;overflow:hidden}
+.artCaptionCell.ac1{left:0;top:38.5925926%;width:49.3518519%;height:10.8888889%}
+.artCaptionCell.ac2{left:50.6481481%;top:38.5925926%;width:49.3518519%;height:10.8888889%}
+.artCaptionCell.ac3{left:0;top:89.1111111%;width:49.3518519%;height:10.8888889%}
+.artCaptionCell.ac4{left:50.6481481%;top:89.1111111%;width:49.3518519%;height:10.8888889%}
+.frameCutText{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:90%;max-width:90%;box-sizing:border-box;text-align:center;white-space:pre-wrap;overflow-wrap:anywhere;word-break:keep-all;overflow:visible}
+@media(max-width:600px){
+ .wrap{width:100%!important;max-width:100%!important;margin:0 auto!important}
+ .card,.paper,.art,.workflow,.wf,.editgrid,.instapanel,.outerEditor,.typepanel,.legacyframe,.guidepanel,.outerframepanel,.finalexport{width:100%;max-width:100%;min-width:0}
+ .wf,.instapanel,.outerEditor{overflow-x:clip}
+ .minirow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .row{grid-template-columns:104px minmax(0,1fr) 45px}
+ .framecolorcontrol{grid-template-columns:104px 52px minmax(0,1fr)}
+}
+
+.todayResetBar{margin:0 0 18px;padding:14px 14px 16px;border:1px solid #ddd7cb;border-radius:18px;background:#faf8f3}.todayResetBar .hint{margin:0 0 10px}.todayResetBar .action{margin:0}
+</style><!-- V74 STATIC BUILD: no runtime HTML fetch/patch chain. Generated from reviewed V68 once at build time. --></head><body><div class="wrap"><div class="head"><div><p class="eyebrow">INK DIARY WORKFLOW</p><h1>Dayframe Ink</h1></div><span class="ver">V74</span><!-- V59 invariant: top paper canvases are absolutely positioned only inside .paper; editor/Instagram output canvases stay in normal flow and can never overlay the Dayframe. Central artwork remains one flattened img layer. --></div><div class="card"><div class="paper"><div class="header"><div class="box"><span id="frameHeaderL" class="frameText"></span><canvas></canvas></div><div class="box"><span id="frameHeaderR" class="frameText"></span><canvas></canvas></div></div><div class="art" id="artArea"><img id="placedCanvas" class="placedCanvas" alt=""><span class="ghost" id="artGhost">그림 영역</span><canvas id="artFrameCanvas"></canvas>
+</div><div class="note"><span id="frameNote" class="frameNote"></span><canvas></canvas><i class="guide g1"></i><i class="guide g2"></i><i class="guide g3"></i></div></div><div id="outerEditor" class="outerEditor" hidden><h3>5 · 상단·하단 칸 텍스트 편집</h3><button class="action" id="backToCutEdit" type="button">← 4:5 지문 위치 다시 조정</button><p class="hint">가운데 4컷과 각 CUT 지문은 완성한 4:5 상태 그대로 유지됩니다. 여기서는 상단 왼쪽·상단 오른쪽·하단 기록 3칸만 새로 입력합니다.</p><div class="caption-tabs" id="outerTabs"><button type="button" data-o="0" class="on">상단 왼쪽</button><button type="button" data-o="1">상단 오른쪽</button><button type="button" data-o="2">하단 기록</button></div><label class="label">선택한 텍스트</label><textarea id="outerText" class="field"></textarea><div class="typepanel"><p class="typepanel-title">바깥 텍스트 스타일</p><label class="upload">＋ 바깥 텍스트 로컬 폰트 선택<input id="outerFontFile" type="file" accept=".ttf,.otf,font/ttf,font/otf"></label><div class="status" id="outerFontStatus">기본 서체</div><button class="action" id="applyOuterFontAll" type="button">현재 폰트만 위·아래 3칸 전체 적용</button><div class="minirow"><label class="range">글자 크기<input id="outerSize" type="range" min="10" max="72" value="24"></label><label class="range">자간<input id="outerSpacing" type="range" min="-4" max="20" step=".5" value="0"></label></div><div class="minirow"><label class="range">행간<input id="outerLineHeight" type="range" min=".8" max="2.4" step=".05" value="1.4"></label><label class="range">좌우 위치<input id="outerX" type="range" min="5" max="95" value="50"></label></div><div class="minirow"><label class="range">상하 위치<input id="outerY" type="range" min="8" max="92" value="50"></label><label class="range colorrow">글자 색<span class="colorwell"><input id="outerColor" type="color" value="#191816"></span></label></div></div><div class="outerframepanel"><p class="typepanel-title">긴 Dayframe 전체 선 색</p><p class="hint">선 굵기는 위 Dayframe의 ‘기본 굵기’ 레버 하나로 상단 2칸·가운데 그림 4컷·하단 기록칸까지 모두 함께 조절됩니다. 선 색도 이 긴 Dayframe 전체에 함께 적용됩니다.</p><div class="minirow"><label class="range colorrow">상단 2칸 + 그림 + 하단 기록 선 색<span class="colorwell"><input id="outerFrameColor" type="color" value="#302e2a"></span></label></div></div><div class="guidepanel"><p class="typepanel-title">하단 줄라인</p><div class="minirow"><label class="range">줄 개수<input id="guideCount" type="range" min="0" max="5" step="1" value="3"></label><label class="range">줄 간격<input id="guideGap" type="range" min="20" max="55" step="1" value="25"></label></div><div class="minirow"><label class="range">전체 상하 위치<input id="guideY" type="range" min="20" max="80" step="1" value="50"></label><label class="range">줄 색상 농도<input id="guideOpacity" type="range" min="10" max="100" step="1" value="56"></label></div></div><div class="finalexport"><button class="action primary" id="makeFinalFrame" type="button">완성 Dayframe 이미지 만들기</button><button class="action" id="downloadFinalFrame" type="button" hidden>↓ 완성 Dayframe PNG 파일 저장</button><img id="finalFrameImage" class="saveimg" hidden><p class="status" id="finalFrameStatus">위·아래 텍스트 편집이 끝나면 한 장의 긴 Dayframe 이미지로 산출할 수 있습니다.</p></div></div><div class="controls"><div class="row"><label>자글자글함</label><input id="grain" type="range" min="0" max="100" value="78"><output>78</output></div><div class="row"><label>잉크 밀도</label><input id="density" type="range" min="40" max="100" value="76"><output>76</output></div><div class="row"><label>미세 굵기 편차</label><input id="pressure" type="range" min="0" max="100" value="24"><output>24</output></div><div class="row"><label>기본 굵기</label><input id="width" type="range" min="2.5" max="8" step=".1" value="5.1"><output>5.1</output></div></div><div class="framecolorcontrol"><span>프레임 선 색</span><span class="colorwell"><input id="frameColorTop" type="color" value="#302e2a" aria-label="프레임 선 색"></span><output id="frameColorHex">#302e2a</output></div><p class="desc">프레임의 중심선은 반듯하게 유지하고 외곽 픽셀/잉크 가장자리만 촘촘하게 자글자글해지는 방식입니다. 원고지 칸은 사용하지 않고 기존 3줄 지문 구조를 유지합니다.</p></div><div class="workflow"><section class="wf setupwf"><h2>1 · 정체성·스타일 레퍼런스</h2>
+<label class="label">캐릭터 정체성 이미지</label><label class="upload">＋ 정체성 기준 이미지 추가<input id="refs" type="file" accept="image/*" multiple></label><div class="thumbs" id="thumbs"></div><p class="status" id="refStatus">정체성 이미지는 최대 5장까지 저장됩니다.</p><div class="refactions"><button id="clearRefs" type="button">전체 이미지 지우기</button></div>
+<div class="refblock"><h3>승인 스타일 기준 이미지 · 1장</h3><p class="hint">D1835EAC-2672-4CFB-9D08-4BEAB32C6AE6.jpeg처럼 최종 승인한 색·채색·경계·비율 기준 이미지를 지정합니다.</p><label class="upload">＋ 승인 스타일 기준 이미지 선택<input id="styleRef" type="file" accept="image/*"></label><div class="thumbs" id="styleThumbs"></div><div class="refactions"><button id="clearStyleRef" type="button">승인 이미지 지우기</button></div></div>
+<div class="refblock"><h3>옆모습 형태 기준 · IMG_9121 · 1장</h3><p class="hint">코와 이마–코–입–턱 외곽 곡선만 참고합니다. 화면 캡처 UI·확대 배율·배경 색감은 스타일 기준이 아닙니다. IMG_9122처럼 코가 둥근 혹처럼 도드라지는 형태는 금지합니다.</p><label class="upload">＋ IMG_9121 옆모습 기준 선택<input id="profileRef" type="file" accept="image/*"></label><div class="thumbs" id="profileThumbs"></div><div class="refactions"><button id="clearProfileRef" type="button">옆모습 기준 지우기</button></div></div>
+<label class="label">캐릭터 이름</label><input id="name" class="field" placeholder="예: 이히리">
+<label class="label">반드시 유지할 특징</label><div class="identitylock"><strong>항상 고정 적용 · DAYFRAME INK × IHIRI v2.4</strong>승인 CUT 1 얼굴형=하관 폭·자연스러운 U자 턱 · 승인 스타일 이미지=중성적인 물 빠진 회차콜 머리·명도/채도/대비·채색 밀도 · IMG_9121=아주 작은 옆모습 코 · 오늘 의상·장소·소품은 매번 가변</div>
+<textarea id="styleGuide" class="field styleguide" readonly># DAYFRAME INK × IHIRI — 고정 이미지 가이드 v2.4
+
+이 가이드는 모든 이히리 4컷 이미지에 적용한다.
+캐릭터와 채색 규칙은 고정하고, 의상·가방·신발·장소·사건은 맨 아래 [오늘의 입력]에서만 지정한다.
+이전 일기의 의상, 소품, 배경을 자동으로 이어받지 않는다.
+
+## 1. 레퍼런스 우선순위와 역할
+
+1. 캐릭터 아이덴티티 이미지
+   - 이히리의 얼굴 인상, 눈의 위치와 간격, 앞머리와 머리 실루엣 기준.
+
+2. 승인된 이히리 한지 스타일 이미지
+   - 인물과 배경의 상대적인 명도·채도·대비, 채색 밀도, 부드럽지만 읽히는 색면 경계, 미니미 비율 기준.
+   - 최신 승인본의 이히리 **머리 영역**은 중성적인 물 빠진 회차콜 머리색의 직접 기준.
+
+3. 승인된 4컷의 CUT 1 이히리 얼굴
+   - 볼 아래에서 턱끝으로 이어지는 하관 폭과 자연스러운 U자 턱 곡선의 직접 기준.
+   - 표정이나 눈을 감은 상태까지 복제하지 않는다. 얼굴 외곽의 형태만 다른 컷에 적용한다.
+
+4. IMG_9121 옆모습 참고 이미지
+   - 아주 작은 코가 이마–코–입–턱의 외곽선에 통합되는 형태만 참고한다.
+   - 화면 캡처 UI, 확대 배율, 배경 색감은 스타일 기준으로 삼지 않는다.
+   - IMG_9122처럼 코가 별도의 둥근 혹으로 돌출된 형태는 피한다.
+
+5. 당일 실사 사진
+   - 실제 장소, 물건, 의상, 신발, 간판의 구조만 참고한다.
+   - 사진 속 실제 인물의 얼굴이나 사진의 선명도·조명·채도·재질 묘사를 복제하지 않는다.
+
+레퍼런스끼리 충돌하면 각 레퍼런스에 지정된 역할을 우선한다.
+실사 사진의 색감이나 조명이 승인된 이히리 한지 스타일과 머리색을 바꾸지 못하게 한다.
+
+## 2. 이히리 얼굴과 이목구비 — 항상 고정
+
+- 이히리는 성인 여성 미니미 캐릭터다. 앞·뒤·옆·3/4 방향에서도 같은 인물로 읽혀야 한다.
+- 얼굴은 볼이 부드러운 짧은 둥근 타원형이다.
+- **승인된 CUT 1 얼굴형을 모든 컷의 얼굴형 기준으로 사용한다.**
+- 볼 아래부터 양쪽 하관의 폭이 서서히 좁아지고, 턱끝은 짧은 직선 없이 하나의 자연스러운 둥근 U자 곡선으로 이어진다.
+- 턱을 길거나 뾰족하게 만들지 않는다. 볼의 최대 너비가 턱 아래까지 그대로 이어지는 넓고 네모난 하관, 평평한 일자 턱, 무턱, 각진 턱, V자 턱도 금지한다.
+- 표정, 안경, 머리 묶음, 시점이 달라져도 기본 하관 폭과 U자 턱 곡선은 동일하다. 머리카락으로 잘못된 턱선을 가리지 않는다.
+- 옆모습의 코는 IMG_9121처럼 얼굴 외곽에 아주 작고 자연스럽게 통합한다. 별도의 둥근 혹·점·삼각형·선을 덧붙이거나 앞으로 크게 돌출시키지 않는다.
+- 눈은 아이덴티티 이미지의 위치와 간격을 유지한 **작은 세로 타원형 점**이다.
+- 눈 색은 무광의 약간 부드러운 진회색 차콜이다. 새까맣게 강조하거나 얼굴에서 사라질 만큼 연하게 만들지 않는다.
+- 동공, 홍채, 흰 반짝임, 속눈썹, 새로 만든 눈썹은 넣지 않는다.
+- 표정이 바뀌어도 눈·코·턱 때문에 이히리가 다른 캐릭터처럼 보이지 않아야 한다.
+
+## 3. 짧고 슬림한 미니미 비율 — 항상 고정
+
+- 서 있는 전신의 **머리 높이 : 머리 아래 몸 전체 높이 = 약 1:1~1:1.2**다. 전체 키는 대략 머리 2~2.2개 높이다.
+- 짧둥함은 **상대적으로 큰 머리와 짧은 몸·다리**에서 나온다. 캐릭터 자체를 배경 속에서 지나치게 작게 축소하는 뜻이 아니다.
+- 몸통·팔·다리는 짧고 손·발은 작다. 다리를 길게 그려 키를 늘리지 않는다.
+- 어깨·몸통·코트를 가로로 과하게 부풀리지 않는다. 짧지만 슬림한 성인 미니미 실루엣을 유지한다.
+- 앉아 있을 때도 머리의 상대적인 크기를 유지하고 허벅지·종아리·발을 길게 만들지 않는다.
+- 상의를 바지 안에 넣는지, 밑단을 밖으로 내는지, 코트의 길이와 품은 반드시 [오늘의 입력]을 따른다. 옷을 바꾸면서 몸 비율이 길어 보이게 만들지 않는다.
+- 함께 등장하는 다른 인물도 같은 미니미 그림 언어와 짧은 팔다리를 따른다.
+
+## 4. 이히리 머리색 — 항상 고정
+
+- 이히리 머리색은 **최신 승인 이미지의 머리 영역과 같은 중성적인 물 빠진 회차콜**이다.
+- 머리의 기본 색면, 밝은 부분, 그림자 부분 모두 중성 회색 계열로 유지한다.
+- 갈색, 초콜릿색, 붉은 갈색, 주황빛 갈색, 청흑색, 새까만 검정 면으로 바꾸지 않는다.
+- 실내의 노란 조명이나 일출의 주황빛이 닿아도 이히리 머리 전체가 갈색으로 변하지 않게 한다.
+- 함께 등장하는 사람에게 갈색 머리를 지정했더라도 그 색을 이히리에게 전이하지 않는다.
+- 머리는 차분한 넓은 색면으로 표현한다. 반복되는 비늘·격자·대리석 무늬, 촘촘한 머리카락 선, 과한 내부 질감은 넣지 않는다.
+- 네 컷의 이히리 머리를 나란히 보았을 때 같은 회차콜의 밝기와 색온도로 보여야 한다.
+
+## 5. 이히리 한지 색상·배색·채색 — 승인 이미지 기준
+
+- 전체 장면을 **낮은 채도, 높은 명도, 절제된 대비**의 부드러운 한지 수채로 통일한다.
+- 승인된 스타일 이미지와 비교해 인물·배경의 **상대적인** 밝기, 채도, 대비, 색 농도를 맞춘다.
+- 인물만 희미하고 배경만 선명하거나, 반대로 인물만 진하고 배경만 흐린 결과를 만들지 않는다.
+- 얇고 반투명한 수채 색면이 부드럽게 겹친 듯 채색한다. 붓 터치가 물결처럼 과하게 반복되거나 얼룩덜룩 두드러지지 않게 한다.
+- 형태는 진한 외곽 스케치선이나 칼같은 디지털 경계보다 이웃한 색면의 부드러운 차이로 읽히게 한다.
+- 경계는 부드럽되 얼굴·표정·옷 구조·중요한 물건과 행동은 알아볼 수 있어야 한다. 전체 블러나 흰 안개 필터로 덮지 않는다.
+- 파랑·초록·청록·주황·황금빛 조명 중 어느 한 색도 장면 전체에서 유독 선명하게 튀지 않게 한다.
+- 야경의 불빛과 일출의 주황빛도 존재하되 밝고 낮은 채도의 한지 색면으로 절제한다.
+- 사람·식물·가구·건물·음식·신발·가방을 같은 한지 채색 언어로 그린다.
+- 실사 같은 광택과 강한 그림자, 3D 재질, 날카로운 디지털 윤곽, 거친 종이 알갱이·섬유·균열·스크래치·노이즈 오버레이를 금지한다.
+- 한지 느낌은 과장된 표면 질감이 아니라 얇은 색층, 절제된 번짐, 부드럽고 읽히는 색면 관계에서 나온다.
+- 한 가지 색상 코드나 전역 채도 필터로 전체 장면을 일괄 치환하지 않는다.
+
+## 6. 컷 간 일관성과 그림 속 텍스트
+
+- 네 컷에서 이히리의 얼굴형, 눈의 위치·간격·크기·차콜 농도, 작은 코, 회차콜 머리, 짧고 슬림한 비율을 일치시킨다.
+- 그날의 의상과 착용 상태는 [오늘의 입력]을 따른다. 장소가 바뀌며 갈아입는 설정은 컷별로 정확히 반영한다.
+- 같은 장소가 이어지면 공간, 소품, 카메라 방향과 행동의 연속성을 유지한다.
+- 그림 속 캡션, 날짜, 말풍선, 가짜 글자, 읽을 수 없는 유사 텍스트, 임의 로고는 생성하지 않는다.
+- [오늘의 입력]에 정확히 허용한 실제 장소·의상 문구만 지정된 위치에 넣을 수 있다.
+- 허용된 글자도 주변 그림보다 유독 선명한 그래픽처럼 뜨지 않게 한다. 정확한 철자가 어렵다면 임의 문자로 대체하지 말고 해당 부분을 비운다.
+
+## 7. DAYFRAME 4:5 고정 레이아웃 — 스타일과 분리
+
+최종 결과물은 테두리와 캡션이 없는 flat PNG 한 장, **정확히 1080×1350px**이다.
+처음부터 아래 네 그림 영역에 맞춰 구성한다.
+다른 비율의 완성 이미지 전체를 마지막에 단순 리사이즈하거나 임의로 크롭하지 않는다.
+Dayframe Ink의 고정 합성과 실제 파일 검증이 좌표를 보장하며, 스타일 수정은 좌표를 변경하지 않는다.
+
+### 전체 캔버스
+
+- 1080×1350px, 4:5
+- 2열 × 2행
+- 세로 거터: x=533–546, 정확히 14px
+- 가로 거터: y=668–681, 정확히 14px
+
+### CUT 전체 영역 — 각 533×668px
+
+- CUT 1: x=0–532, y=0–667
+- CUT 2: x=547–1079, y=0–667
+- CUT 3: x=0–532, y=682–1349
+- CUT 4: x=547–1079, y=682–1349
+
+### 실제 그림 영역 — 각 533×521px
+
+- CUT 1: x=0–532, y=0–520
+- CUT 2: x=547–1079, y=0–520
+- CUT 3: x=0–532, y=682–1202
+- CUT 4: x=547–1079, y=682–1202
+
+그림·인물·배경색은 지정된 그림 영역 안에서 끝난다.
+그림칸에 맞추려고 인물의 가로·세로 비율을 따로 늘이거나 눌러서는 안 된다.
+
+### 빈 지문란 — 각 533×147px
+
+- CUT 1: x=0–532, y=521–667
+- CUT 2: x=547–1079, y=521–667
+- CUT 3: x=0–532, y=1203–1349
+- CUT 4: x=547–1079, y=1203–1349
+
+네 지문란과 모든 거터의 **실제 픽셀은 전부 #F8F7F5, RGB (248, 247, 245)**다.
+글자·그림·질감·그림자·번짐·테두리를 넣지 않는다.
+
+### 이미지 안에 생성 금지
+
+- 바깥 프레임, CUT 테두리, 패널 구분선
+- Ink 스트로크, 가이드라인, 임의 여백 장식
+- 캡션, 지문 텍스트, 날짜, 말풍선
+
+Dayframe Ink 앱이 최종 프레임과 지문을 별도로 추가한다.
+
+## 8. 생성 전후 필수 확인
+
+### 생성 전
+
+- 첨부한 각 레퍼런스가 담당하는 역할을 확인한다.
+- 승인된 CUT 1 얼굴과 최신 승인본의 회차콜 머리를 식별한다.
+- 오늘의 의상·장소·소품·착용 상태를 과거 일기와 분리해 확인한다.
+
+### 그림 검수
+
+- CUT 2·3 등 얼굴이 보이는 컷을 CUT 1과 나란히 비교한다. 볼 아래가 서서히 좁아지고 턱끝이 끊김 없는 둥근 U자인가?
+- 안경·표정·머리 묶음이 달라도 같은 이히리 얼굴인가?
+- 옆얼굴 코가 작고 얼굴 외곽선에 자연스럽게 통합되었는가?
+- 눈이 작은 세로 타원형이며 무광의 부드러운 차콜인가?
+- 네 컷의 이히리 머리가 모두 갈색 기운 없는, 밝고 중성적인 물 빠진 회차콜인가?
+- 서 있거나 앉아 있어도 머리:머리 아래 몸 전체 높이 약 1:1~1:1.2의 짧고 슬림한 비율인가?
+- 다른 등장인물도 같은 미니미 그림 언어인가?
+- 인물·배경·조명·야경이 함께 낮은 채도와 절제된 대비를 유지하는가?
+- 붓 터치, 종이 질감, 외곽선이 과하지 않은가?
+- 오늘의 의상·장소·소품·동선이 컷마다 맞는가?
+- 허용되지 않은 글자나 프레임 선이 없는가?
+
+하나라도 어긋나면 해당 컷을 수정한 뒤 다시 검수한다.
+
+### 실제 파일 검수
+
+1. 최종 PNG의 실제 크기가 1080×1350px인지 확인한다.
+2. 네 그림 영역의 실제 시작·끝 좌표를 확인한다.
+3. 네 지문란이 각각 533×147px인지 확인한다.
+4. 세로·가로 거터가 각각 정확히 14px인지 확인한다.
+5. 거터와 네 지문란의 **모든 실제 RGB 픽셀**이 (248, 247, 245)인지 확인한다.
+6. 그림이 빈 영역으로 넘치거나 이미지에 프레임 선이 있으면 반환하지 않는다.
+7. 생성기가 고정 좌표를 지키지 못하면 네 그림을 지정 좌표에 합성한 후 완성된 래스터를 다시 검증한다.
+8. 합성 과정에서 캐릭터를 가로·세로로 비균등하게 늘이거나 누르지 않는다.
+
+## [오늘의 입력 — 매일 새로 작성]
+
+- 오늘의 이야기:
+- CUT 1 행동·시점·장소:
+- CUT 2 행동·시점·장소:
+- CUT 3 행동·시점·장소:
+- CUT 4 행동·시점·장소:
+- 이히리의 기본 의상:
+- 컷별 갈아입은 의상, 겉옷, 가방, 신발 및 착용·내려놓은 상태:
+- 함께 등장하는 인물의 관계·외형·행동:
+- 컷별 반드시 보일 물건과 공간 구조:
+- 정확히 허용할 장소·의상 문구(없으면 NONE):
+- 당일 실사 사진별 참고 목적:
+
+최종 반환: 그림 검수와 실제 파일 검수를 통과한, 테두리·캡션 없는 flat 4:5 PNG 한 장.</textarea>
+<label class="label">추가 정체성 메모 · 선택</label><textarea id="notes" class="field" placeholder="고정해야 할 개인 특징만 추가하세요. 그날 의상·장소는 아래 오늘의 조건에 적습니다."></textarea></section>
+
+<section class="wf setupwf"><h2>2 · 오늘의 기록과 가변 조건</h2><div class="todayResetBar"><p class="hint">새 기록을 시작할 때 오늘 입력값만 비웁니다. 캐릭터 정체성·승인 스타일·옆모습 기준·고정 가이드는 유지됩니다.</p><button class="action" id="resetToday" type="button">오늘 기록 새로 시작 · 가변값 리셋</button></div><textarea id="diary" class="field area" placeholder="오늘 있었던 일을 자유롭게 적어주세요."></textarea>
+<div class="refblock"><h3>오늘의 장소·의상 실사 참고 이미지</h3><p class="hint">장소 구조·물건 형태·의상 구성만 참고합니다. 이 이미지의 얼굴·실사 조명·선명도·색감은 스타일 기준이 아닙니다.</p><label class="upload">＋ 오늘의 참고 이미지 추가<input id="dailyRefs" type="file" accept="image/*" multiple></label><div class="thumbs" id="dailyThumbs"></div><div class="refactions"><button id="clearDailyRefs" type="button">오늘 참고 이미지 지우기</button></div></div>
+<div class="vargrid"><label class="label">오늘의 의상·가방·신발</label><textarea id="dailyLook" class="field" placeholder="예: 핑크 셔츠, 연청, 검정 숄더백…"></textarea><label class="label">오늘의 장소·소품·실내외 상태</label><textarea id="dailyPlace" class="field" placeholder="예: 교회 예배당, 비 오는 밤 거리…"></textarea><label class="label">정확히 넣을 장소 글자 · 없으면 비움</label><input id="exactPlaceText" class="field" placeholder="예: 실제 간판 LOTS OF PATCHWORK CLUB"><label class="label">CUT별 시선·카메라 방향 · 선택</label><textarea id="cutDirection" class="field" placeholder="예: CUT1 뒤에서 3/4, CUT2 정면보다 약간 측면…"></textarea></div>
+<div class="seg"><button class="on" data-mode="single">1컷 그림일기</button><button data-mode="four">4컷 만화</button></div><button class="action primary" id="compose">장면 구성하기</button><div id="scenes"></div></section>
+
+<section class="wf setupwf"><h2>3 · 최종 프롬프트</h2><p class="hint">v2.4 고정 이미지 가이드 → 오늘의 입력을 결합해 한 번만 구성합니다. 고정 가이드와 오늘의 가변 조건은 분리됩니다.</p><div class="attachnotice"><strong>중요:</strong> 이 웹앱의 ‘프롬프트 복사’는 이미지 파일 자체를 ChatGPT로 전송하지 않습니다. 생성 대화에 <strong>캐릭터 정체성 이미지 + 승인 스타일 기준 이미지 + IMG_9121 옆모습 기준 이미지</strong>를 함께 첨부하세요. IMG_9122는 실패 예시이므로 생성 레퍼런스로 첨부하지 않습니다. 오늘의 실사 참고 이미지가 있다면 그것도 함께 첨부하세요.</div><textarea id="prompt" class="field prompt"></textarea><p class="status" id="promptQA">프롬프트를 만들면 v2.4 고정 가이드 적용 여부와 오늘 입력 결합 상태를 자동 검수합니다.</p><button class="action primary" id="build">Ink V74 프롬프트 만들기</button><button class="action" id="copy">프롬프트 복사</button><button class="action" id="restorePrompt" type="button">직전 프롬프트 복원</button></section><section class="wf"><h2>4 · 4:5 생성 이미지 편집</h2><p class="hint">먼저 가져온 4:5 이미지를 <strong>원래 비율·크기 그대로</strong> 보면서 CUT 1~4 지문을 완성합니다. 지문 편집은 항상 사용할 수 있고, 원본에 이미 지문이 있는 경우에만 아래 중복 방지 옵션을 켭니다.</p><label class="upload">＋ 4:5 생성 이미지 가져오기<input id="result" type="file" accept="image/*"></label><p class="status" id="importHint">가져오면 1080×1350 전체를 한 번만 축소·확대해 표시합니다. CUT별 크롭은 하지 않습니다. 지문 편집이 끝난 뒤 아래 ‘위 그림 영역에 넣기’를 누르세요.</p><div class="editgrid"><div class="preview"><canvas id="editCanvas" width="1080" height="1350"></canvas></div><div id="captionTabs" class="caption-tabs"></div><label class="label">선택한 지문</label><textarea id="editText" class="field"></textarea><div class="edittooltabs" role="tablist" aria-label="지문 편집 도구"><button id="positionTab" class="on" type="button" data-edittool="position" role="tab" aria-selected="true">위치 조절</button><button id="styleTab" type="button" data-edittool="style" role="tab" aria-selected="false">텍스트 스타일</button></div><div id="positionPanel" class="positionpanel edittoolpanel" data-editpanel="position"><div class="positionhead"><strong>지문 위치</strong><span>실제 흰 지문란 기준 · 0=최상단 / 100=최하단</span></div><label class="range">지문란 안 상하 위치<input id="textY" type="range" min="0" max="100" step=".25" value="40"></label><label class="range">좌우 위치<input id="textX" type="range" min="0" max="100" step=".25" value="50"></label><div class="nudge"><button data-nudge="-1,0">← 1</button><button data-nudge="1,0">1 →</button><button data-nudge="0,-1">↑ 1</button><button data-nudge="0,1">1 ↓</button></div><div class="pospad" id="pospad"><button data-pos="20,20">↖</button><button data-pos="50,20">↑</button><button data-pos="80,20">↗</button><button data-pos="20,50">←</button><button data-pos="50,50">●</button><button data-pos="80,50">→</button><button data-pos="20,82">↙</button><button data-pos="50,82">↓</button><button data-pos="80,82">↘</button></div><p class="position-note">미리보기에서 지문을 직접 드래그할 수도 있습니다.</p></div><div id="stylePanel" class="typepanel edittoolpanel" data-editpanel="style" hidden><p class="typepanel-title">텍스트 스타일</p><label class="upload">＋ 파일 앱에서 폰트 선택<input id="fontFile" type="file" accept=".ttf,.otf,font/ttf,font/otf"></label><div class="status" id="fontStatus">기본 서체</div><button class="action" id="applyTypeAll" type="button">현재 CUT의 스타일·첫 줄 위치 전체 적용</button><div class="minirow"><label class="range">글자 크기<input id="textSize" type="range" min="18" max="180" value="44"></label><label class="range">자간<input id="letterSpacing" type="range" min="-4" max="30" step=".5" value="0"></label></div><div class="minirow"><label class="range">행간<input id="lineHeight" type="range" min=".8" max="2.4" step=".05" value="1.35"></label><label class="range colorrow">글자 색<span class="colorwell"><input id="textColor" type="color" value="#191816"></span></label></div></div><div class="outputnote"><strong>두 결과를 모두 만들 수 있어요.</strong><br>① 4:5 PNG는 현재 CUT 지문으로 저장 · ② 위 Dayframe에 올릴 때 CUT 1~4 지문은 새로 입력</div><div class="typepanel" id="cutFramePanel"><p class="typepanel-title">4:5 그림 CUT 테두리</p><p class="hint">생성 이미지를 가져온 뒤에도 CUT 1~4 Ink 선의 굵기와 색을 조절합니다. 기본 자동 여백은 선 굵기와 별개로 유지됩니다.</p><div class="minirow"><label class="range">선 굵기 <span id="cutFrameWidthOut">5.1</span><input id="cutFrameWidth" type="range" min="2.5" max="8" step=".1" value="5.1"></label><label class="range colorrow">선 색<span class="colorwell"><input id="cutFrameColor" type="color" value="#302e2a"></span></label></div></div><div class="legacyframe"><label><input id="stripOldFrames" type="checkbox" checked> 기존 생성 이미지의 테두리 참고 감지</label><button class="action" type="button" id="autoStrip">원본 4컷 위치 다시 감지</button><label class="range">원본 가장자리 보정<input id="stripAdjust" type="range" min="-4" max="18" step="1" value="4"></label><p class="status" id="stripStatus">‘테두리 자동 맞춤’을 누르면 4컷 전체 구조를 한 번에 분석해 기존 선만 가리고, 그림 배율은 네 컷 모두 동일하게 유지합니다.</p><label class="legacycaption"><input id="keepExistingCaption" type="checkbox"> 원본 이미지에 지문이 이미 들어있을 때만 켜기 · 앱 지문 추가 안 함</label></div><button class="action primary" id="placeInFrame">① 지문 상태 그대로 ↑ 위 그림 영역에 넣기</button><button class="action" id="saveImage">② 지문까지 넣은 4:5 이미지 만들기</button><button class="action primary" id="download45" type="button" hidden>↓ 4:5 PNG 파일 저장</button><div id="instagramPanel" class="instapanel" hidden><h3>Instagram 여백 가공</h3><p class="hint">완성된 4:5 이미지는 그대로 두고, 1080×1350 캔버스 안에서만 축소해 바깥 여백을 추가합니다. 원본은 잘리지 않습니다.</p><div class="minirow"><label class="range">바깥 여백 <span id="instaMarginOut">5%</span><input id="instaMargin" type="range" min="0" max="12" step=".5" value="5"></label><label class="range colorrow">여백 색<span class="colorwell"><input id="instaBg" type="color" value="#fffdf8"></span></label></div><button class="action" id="makeInstagram" type="button">Instagram 여백 미리보기 만들기</button><button class="action primary" id="downloadInstagram" type="button" hidden>↓ 여백 포함 4:5 PNG 저장</button><canvas id="instagramPreview" class="instaPreview" width="1080" height="1350" hidden></canvas></div><img id="savedImage" class="saveimg" hidden><p class="status" id="editStatus">생성 이미지를 먼저 가져와 주세요.</p></div></section></div></div><script>
+const q=s=>document.querySelector(s),cs=[...document.querySelectorAll('.paper canvas')],ids=['grain','density','pressure','width'];let mode='single',sceneData=[],outerFrameStyle={color:'#302e2a'};function hash(n){return (Math.sin(n*127.1)*43758.5453)%1}function inkRGBA(hex,a){const h=String(hex||'#302e2a').replace('#',''),v=h.length===3?h.split('').map(c=>c+c).join(''):h,n=parseInt(v,16);return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`}function line(ctx,a,b,c,d,seed,widthScale=1,strokeColor='#302e2a',baseWidth=null){const G=+q('#grain').value/100,D=+q('#density').value/100,P=+q('#pressure').value/100,W=(baseWidth??+q('#width').value)*widthScale,L=Math.hypot(c-a,d-b),N=Math.max(60,Math.floor(L/2.3)),nx=-(d-b)/L,ny=(c-a)/L;for(let pass=0;pass<3;pass++){ctx.beginPath();for(let i=0;i<=N;i++){let t=i/N,x=a+(c-a)*t,y=b+(d-b)*t;let hi=(hash(seed+i*37+pass*101)-.5)*G*.72;let micro=(Math.sin(i*2.7+seed)+Math.sin(i*5.3+seed*.7))*.13*G;let felt=(hash(seed+i*71+pass*19)-.5)*G*.34;let off=hi+micro+felt;x+=nx*off;y+=ny*off;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle=inkRGBA(strokeColor,Math.min(.98,.42+D*.5-pass*.105));ctx.lineWidth=Math.max(1,W*(1+(hash(seed+pass*17)-.5)*P*.045)-pass*.72);ctx.stroke()}}
+function draw(c,s){let r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=r.width*d;c.height=r.height*d;let x=c.getContext('2d');x.scale(d,d);let p=3,isOuter=!!c.closest('.header,.note'),isHeader=!!c.closest('.header'),col=isOuter?outerFrameStyle.color:'#302e2a',bw=null;
+  // V59: V3 texture deliberately samples at least 60 points per edge. On the very
+  // short header-box verticals that makes the same numeric width look optically
+  // heavier than the long horizontals. Keep V3 untouched and compensate only
+  // those two short vertical sides; the global 기본 굵기 slider still drives both.
+  const vScale=isHeader?.74:1;
+  line(x,p,p,r.width-p,p,s+1,1,col,bw);
+  line(x,r.width-p,p,r.width-p,r.height-p,s+2,vScale,col,bw);
+  line(x,r.width-p,r.height-p,p,r.height-p,s+3,1,col,bw);
+  line(x,p,r.height-p,p,p,s+4,vScale,col,bw)
+}function frameEdgeCoords(b,W,H,p=3){
+  const eps=.75,l=b.x,t=b.y,r=b.x+b.w,bt=b.y+b.h;
+  return{l:l<=eps?l+p:l+p,t:t<=eps?t+p:t+p,r:r>=W-eps?r-p:r-p,b:bt>=H-eps?bt-p:bt-p}
+}
+function drawCutFrameSet(x,W,H,width,color,widthScale=1){
+  const visualW=Math.max(1,width*widthScale),inset=Math.max(3,visualW*.58+1.5);
+  if(mode!=='four'){const p=inset;line(x,p,p,W-p,p,701,widthScale,color,width);line(x,W-p,p,W-p,H-p,702,widthScale,color,width);line(x,W-p,H-p,p,H-p,703,widthScale,color,width);line(x,p,H-p,p,p,704,widthScale,color,width);return}
+  panelBoxesFor(W,H).forEach((b,i)=>{const e=frameEdgeCoords(b,W,H,inset);line(x,e.l,e.t,e.r,e.t,701+i*11,widthScale,color,width);line(x,e.r,e.t,e.r,e.b,702+i*11,widthScale,color,width);line(x,e.r,e.b,e.l,e.b,703+i*11,widthScale,color,width);line(x,e.l,e.b,e.l,e.t,704+i*11,widthScale,color,width)})
+}
+function drawArtFrames(){const c=q('#artFrameCanvas');if(!c)return;const r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=Math.max(1,Math.round(r.width*d));c.height=Math.max(1,Math.round(r.height*d));const x=c.getContext('2d');x.scale(d,d);drawCutFrameSet(x,r.width,r.height,+q('#width').value,outerFrameStyle.color,1)}function render(){ids.forEach(id=>q('#'+id).nextElementSibling.textContent=q('#'+id).value);cs.forEach((c,i)=>c.id==='artFrameCanvas'?drawArtFrames():draw(c,73+i*19))}ids.forEach(id=>q('#'+id).addEventListener('input',render));addEventListener('resize',render);render();
+const refs=[],dailyRefs=[];let styleRef='',profileRef='';
+function safeStore(key,value,statusEl){
+  try{localStorage.setItem(key,value);return true}
+  catch(err){if(statusEl)statusEl.textContent='⚠️ 브라우저 저장공간이 부족해 일부 이미지는 현재 화면에만 유지됩니다. 이미지를 지우거나 새로고침 전에 다시 시도해 주세요.';return false}
+}
+function saveRefs(){return safeStore('dayframeInk.refs',JSON.stringify(refs),q('#refStatus'))}
+function saveStyleRef(){try{if(styleRef)localStorage.setItem('dayframeInk.styleRef.v21',styleRef);else localStorage.removeItem('dayframeInk.styleRef.v21');return true}catch{return false}}
+function saveProfileRef(){try{if(profileRef)localStorage.setItem('dayframeInk.profileRef.v22',profileRef);else localStorage.removeItem('dayframeInk.profileRef.v22');return true}catch{return false}}
+function saveDailyRefs(){return safeStore('dayframeInk.dailyRefs',JSON.stringify(dailyRefs),null)}
+function renderThumbList(rootId,list,onDelete,label){const root=q('#'+rootId);root.innerHTML='';list.forEach((src,i)=>{const w=document.createElement('div');w.className='thumb';const im=new Image;im.src=src;im.alt=label+' '+(i+1);const b=document.createElement('button');b.className='delref';b.type='button';b.textContent='×';b.onclick=()=>onDelete(i);w.append(im,b);root.append(w)})}
+function renderRefs(){renderThumbList('thumbs',refs,i=>{refs.splice(i,1);renderRefs();saveRefs()},'정체성 이미지');const st=q('#refStatus');if(st&&!st.textContent.startsWith('⚠️'))st.textContent='정체성 이미지 '+refs.length+'/5장 저장됨'}
+function renderStyleRef(){renderThumbList('styleThumbs',styleRef?[styleRef]:[],()=>{styleRef='';renderStyleRef();saveStyleRef()},'승인 스타일 기준 이미지')}
+function renderProfileRef(){renderThumbList('profileThumbs',profileRef?[profileRef]:[],()=>{profileRef='';renderProfileRef();saveProfileRef()},'IMG_9121 옆모습 기준 이미지')}
+function renderDailyRefs(){renderThumbList('dailyThumbs',dailyRefs,i=>{dailyRefs.splice(i,1);renderDailyRefs();saveDailyRefs()},'오늘 참고 이미지')}
+function fileToCompressedDataURL(file,maxSide=1200,quality=.88){
+  return new Promise((resolve,reject)=>{
+    const rd=new FileReader;
+    rd.onerror=()=>reject(rd.error||new Error('read failed'));
+    rd.onload=()=>{const im=new Image;im.onerror=()=>reject(new Error('image load failed'));im.onload=()=>{
+      const scale=Math.min(1,maxSide/Math.max(im.naturalWidth||1,im.naturalHeight||1));
+      const w=Math.max(1,Math.round(im.naturalWidth*scale)),h=Math.max(1,Math.round(im.naturalHeight*scale));
+      const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(im,0,0,w,h);
+      resolve(c.toDataURL('image/jpeg',quality))
+    };im.src=rd.result};rd.readAsDataURL(file)
+  })
+}
+async function dataURLCompressed(src,maxSide=1200,quality=.86){
+  if(!src||src.length<280000)return src;
+  return new Promise(resolve=>{const im=new Image;im.onerror=()=>resolve(src);im.onload=()=>{
+    const scale=Math.min(1,maxSide/Math.max(im.naturalWidth||1,im.naturalHeight||1));if(scale===1&&src.length<420000)return resolve(src);
+    const w=Math.max(1,Math.round(im.naturalWidth*scale)),h=Math.max(1,Math.round(im.naturalHeight*scale)),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(im,0,0,w,h);resolve(c.toDataURL('image/jpeg',quality))
+  };im.src=src})
+}
+async function compactLegacyReferenceStorage(){
+  try{
+    const next=await Promise.all(refs.map(v=>dataURLCompressed(v)));let changed=next.some((v,i)=>v!==refs[i]);
+    if(changed){refs.splice(0,refs.length,...next);renderRefs();saveRefs()}
+    if(styleRef){const z=await dataURLCompressed(styleRef);if(z!==styleRef){styleRef=z;renderStyleRef();saveStyleRef()}}
+    if(profileRef){const pz=await dataURLCompressed(profileRef);if(pz!==profileRef){profileRef=pz;renderProfileRef();saveProfileRef()}}
+    if(dailyRefs.length){const dz=await Promise.all(dailyRefs.map(v=>dataURLCompressed(v)));if(dz.some((v,i)=>v!==dailyRefs[i])){dailyRefs.splice(0,dailyRefs.length,...dz);renderDailyRefs();saveDailyRefs()}}
+  }catch{}
+}
+q('#refs').onchange=async e=>{
+  const files=[...e.target.files],room=Math.max(0,5-refs.length),chosen=files.slice(0,room);
+  e.target.value='';
+  if(!chosen.length){q('#refStatus').textContent=room===0?'최대 5장까지 저장할 수 있습니다.':'선택된 이미지가 없습니다.';return}
+  q('#refStatus').textContent=chosen.length+'장 불러오는 중…';
+  try{
+    const added=await Promise.all(chosen.map(f=>fileToCompressedDataURL(f)));
+    refs.push(...added);renderRefs();const ok=saveRefs();
+    if(ok)q('#refStatus').textContent='정체성 이미지 '+refs.length+'/5장 저장됨'+(files.length>room?' · 최대 5장까지만 추가됨':'')
+  }catch{q('#refStatus').textContent='⚠️ 일부 이미지를 불러오지 못했습니다. 다시 선택해 주세요.'}
+};
+q('#styleRef').onchange=async e=>{const file=e.target.files&&e.target.files[0];e.target.value='';if(!file)return;try{styleRef=await fileToCompressedDataURL(file);renderStyleRef();saveStyleRef()}catch{}};
+q('#profileRef').onchange=async e=>{const file=e.target.files&&e.target.files[0];e.target.value='';if(!file)return;try{profileRef=await fileToCompressedDataURL(file);renderProfileRef();saveProfileRef()}catch{}};
+q('#dailyRefs').onchange=async e=>{const files=[...e.target.files],room=Math.max(0,5-dailyRefs.length),chosen=files.slice(0,room);e.target.value='';if(!chosen.length)return;try{const added=await Promise.all(chosen.map(f=>fileToCompressedDataURL(f)));dailyRefs.push(...added);renderDailyRefs();saveDailyRefs()}catch{}};
+q('#clearRefs').onclick=()=>{refs.length=0;renderRefs();saveRefs();q('#refs').value=''};
+q('#clearStyleRef').onclick=()=>{styleRef='';renderStyleRef();saveStyleRef();q('#styleRef').value=''};
+q('#clearProfileRef').onclick=()=>{profileRef='';renderProfileRef();saveProfileRef();q('#profileRef').value=''};
+q('#clearDailyRefs').onclick=()=>{dailyRefs.length=0;renderDailyRefs();saveDailyRefs();q('#dailyRefs').value=''};
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('on',x===b));render()});
+function splitFour(t){const paras=t.split(/\n+/).map(x=>x.trim()).filter(Boolean);let units=[];paras.forEach(p=>{const ss=p.match(/[^.!?。！？]+[.!?。！？]?/g)||[p];units.push(...ss.map(x=>x.trim()).filter(Boolean))});if(units.length<4){const words=t.split(/\s+/).filter(Boolean),chunk=Math.ceil(words.length/4);units=Array.from({length:4},(_,i)=>words.slice(i*chunk,(i+1)*chunk).join(' ')).filter(Boolean)}const groups=Array.from({length:4},()=>[]);units.forEach((u,i)=>groups[Math.min(3,Math.floor(i*4/units.length))].push(u));return groups.map(g=>g.join(' ').trim()||t)}function makeCaption(scene,i){let c=scene.replace(/\s+/g,' ').trim();if(c.length>52)c=c.slice(0,50).replace(/\s+\S*$/,'')+'…';return c||('오늘의 장면 '+(i+1))}function compose(){const t=q('#diary').value.trim();if(!t)return alert('오늘의 기록을 먼저 적어주세요.');sceneData=mode==='four'?splitFour(t):[t];q('#scenes').innerHTML=sceneData.map((v,i)=>'<label class="label">'+(mode==='four'?'CUT '+(i+1):'장면 설명')+'</label><textarea class="field scene" data-i="'+i+'">'+v+'</textarea><label class="label">지문 · 기본 자동 생성</label><textarea class="field caption" data-i="'+i+'">'+makeCaption(v,i)+'</textarea>').join('');document.querySelectorAll('.scene').forEach(x=>x.oninput=()=>sceneData[+x.dataset.i]=x.value)}
+q('#compose').onclick=compose;
+function promptHistory(){try{return JSON.parse(localStorage.getItem('dayframeInk.promptHistory.v21')||'[]')}catch{return[]}}
+function archivePrompt(v){const value=String(v||'').trim();if(!value)return;const h=promptHistory();if(h[0]!==value)h.unshift(value);localStorage.setItem('dayframeInk.promptHistory.v21',JSON.stringify(h.slice(0,20)))}
+function saveCurrentPrompt(){localStorage.setItem('dayframeInk.prompt.current',q('#prompt').value||'')}
+function build(){
+  archivePrompt(q('#prompt').value);
+  if(!sceneData.length)compose();
+  if(!sceneData.length)return;
+  const rawExtra=q('#notes').value.trim();
+  const legacyExtra=/IHIRI MINIMI HANJI SOFT WASH\s*v1\.3|soft brown-black/i.test(rawExtra);
+  const extra=legacyExtra?'':rawExtra;
+  const todayLook=q('#dailyLook').value.trim()||'Not specified — infer only from today’s scene/reference photos; never reuse a past diary outfit.';
+  const todayPlace=q('#dailyPlace').value.trim()||'Not specified — follow today’s scene and any attached real-location reference only.';
+  const exactText=q('#exactPlaceText').value.trim()||'NONE';
+  const camera=q('#cutDirection').value.trim()||'Not specified — choose natural views while preserving spatial continuity.';
+  const cuts=sceneData.map((x,i)=>'- CUT '+(i+1)+' 행동·시점·장소: '+x).join('\n');
+  const fullGuide=q('#styleGuide').value.trim();
+  const marker='## [오늘의 입력 — 매일 새로 작성]';
+  const fixedGuide=fullGuide.includes(marker)?fullGuide.slice(0,fullGuide.indexOf(marker)).trim():fullGuide;
+  q('#prompt').value='DAYFRAME INK — V74 IMAGE PROMPT\n\n'+fixedGuide+
+    (extra?'\n\n## 추가 정체성 메모 — 고정\n'+extra:'')+
+    '\n\n## [오늘의 입력 — 오늘]\n\n'+
+    '- 오늘의 이야기: '+q('#diary').value.trim()+'\n'+cuts+'\n'+
+    '- 이히리의 기본 의상 / 가방 / 신발 / 착용 상태: '+todayLook+'\n'+
+    '- 컷별 장소·소품·실내외 상태 및 반드시 보일 구조: '+todayPlace+'\n'+
+    '- 정확히 허용할 장소·의상 문구(없으면 NONE): '+exactText+'\n'+
+    '- CUT별 시선·카메라 방향: '+camera+'\n'+
+    '- 당일 실사 사진별 참고 목적: 오늘 업로드한 실사 참고 이미지는 실제 장소·물건·의상·신발·간판의 구조만 참고한다. 사진의 얼굴·조명·선명도·채도·재질은 복제하지 않는다.\n\n'+
+    '최종 반환: 그림 검수와 실제 파일 검수를 통과한, 테두리·캡션 없는 flat 4:5 PNG 한 장.';
+  const pv=q('#prompt').value;
+  const ok=pv.includes('# DAYFRAME INK × IHIRI — 고정 이미지 가이드 v2.4')&&pv.includes('## [오늘의 입력 — 오늘]')&&!/IHIRI MINIMI HANJI SOFT WASH\s*v1\.3|soft brown-black/i.test(pv);
+  q('#promptQA').textContent=ok?(legacyExtra?'✓ v2.4 고정 가이드 적용 · 저장된 구형 v1.3 추가 메모는 이번 프롬프트에서 자동 제외 · 오늘 입력 결합 정상':'✓ v2.4 고정 가이드 적용 · 오늘 입력 결합 정상 · 과거 일기 자동 상속 없음'):'⚠️ 프롬프트 검수 필요: v2.4 고정 가이드 또는 오늘 입력 결합 상태를 확인하세요.';
+  saveCurrentPrompt();
+}q('#build').onclick=build;q('#prompt').oninput=saveCurrentPrompt;q('#copy').onclick=async()=>{if(!q('#prompt').value)build();saveCurrentPrompt();await navigator.clipboard.writeText(q('#prompt').value)};q('#restorePrompt').onclick=()=>{const h=promptHistory();if(!h.length)return alert('복원할 이전 프롬프트가 아직 없습니다.');const current=q('#prompt').value;const prev=h.shift();if(current.trim()&&current!==prev)h.unshift(current);q('#prompt').value=prev;localStorage.setItem('dayframeInk.promptHistory.v21',JSON.stringify(h.slice(0,20)));saveCurrentPrompt();q('#promptQA').textContent='이전 프롬프트를 복원했습니다. 필요하면 다시 v2.4 프롬프트 만들기를 눌러 최신 가이드로 갱신하세요.'};
+try{
+  if(!localStorage.getItem('dayframeInk.v21Migrated')){
+    const oldNotes=localStorage.getItem('dayframeInk.notes'),oldRefs=localStorage.getItem('dayframeInk.refs');
+    if(oldNotes!==null)localStorage.setItem('dayframeInk.legacy.v51.notes',oldNotes);
+    if(oldRefs!==null)localStorage.setItem('dayframeInk.legacy.v51.refs',oldRefs);
+    localStorage.setItem('dayframeInk.legacy.v51.style','IHIRI MINIMI HANJI SOFT WASH v1.3');
+    localStorage.setItem('dayframeInk.v21Migrated','1');
+  }
+  if(!localStorage.getItem('dayframeInk.v22Migrated')){
+    const oldPrompt=localStorage.getItem('dayframeInk.prompt.current');
+    if(oldPrompt)localStorage.setItem('dayframeInk.legacy.v58.prompt',oldPrompt);
+    localStorage.setItem('dayframeInk.legacy.v58.style','IHIRI MINIMI HANJI SOFT WASH v2.1');
+    localStorage.setItem('dayframeInk.v22Migrated','1');
+  }
+  q('#name').value=localStorage.getItem('dayframeInk.name')||'';
+  q('#notes').value=localStorage.getItem('dayframeInk.notes')||'';
+  q('#diary').value=localStorage.getItem('dayframeInk.diary')||'';
+  q('#dailyLook').value=localStorage.getItem('dayframeInk.dailyLook')||'';
+  q('#dailyPlace').value=localStorage.getItem('dayframeInk.dailyPlace')||'';
+  q('#exactPlaceText').value=localStorage.getItem('dayframeInk.exactPlaceText')||'';
+  q('#cutDirection').value=localStorage.getItem('dayframeInk.cutDirection')||'';
+  q('#prompt').value=localStorage.getItem('dayframeInk.prompt.current')||'';
+  refs.push(...JSON.parse(localStorage.getItem('dayframeInk.refs')||'[]'));
+  styleRef=localStorage.getItem('dayframeInk.styleRef.v21')||'';
+  profileRef=localStorage.getItem('dayframeInk.profileRef.v22')||'';
+  dailyRefs.push(...JSON.parse(localStorage.getItem('dayframeInk.dailyRefs')||'[]'));
+  renderRefs();renderStyleRef();renderProfileRef();renderDailyRefs();setFrameColor(localStorage.getItem('dayframeInk.frameColor')||'#302e2a',false);setTimeout(compactLegacyReferenceStorage,0)
+}catch{}
+['name','notes','diary','dailyLook','dailyPlace','exactPlaceText','cutDirection'].forEach(id=>q('#'+id).oninput=()=>localStorage.setItem('dayframeInk.'+id,q('#'+id).value));
+q('#resetToday').onclick=()=>{
+  if(!confirm('오늘 입력값과 오늘 참고 이미지만 비우고 새 기록을 시작할까요? 캐릭터 정체성·승인 스타일·IMG_9121 기준·이름·고정 정체성 메모는 유지됩니다.'))return;
+  archivePrompt(q('#prompt').value);
+  ['diary','dailyLook','dailyPlace','exactPlaceText','cutDirection'].forEach(id=>{q('#'+id).value='';localStorage.removeItem('dayframeInk.'+id)});
+  dailyRefs.length=0;renderDailyRefs();saveDailyRefs();q('#dailyRefs').value='';
+  sceneData=[];q('#scenes').innerHTML='';
+  q('#prompt').value='';localStorage.removeItem('dayframeInk.prompt.current');
+  q('#promptQA').textContent='새 오늘 기록을 시작했습니다. 고정 정체성·스타일 기준은 그대로 유지됩니다.';
+  window.scrollTo({top:q('#diary').getBoundingClientRect().top+window.scrollY-24,behavior:'smooth'});
+};
+
+const cutFrameStyle={width:5.1,color:'#302e2a'};const EC=q('#editCanvas'),EX=EC.getContext('2d');let resultImg=null,editItems=[],activeEdit=0;
+function ensureItems(){const caps=[...document.querySelectorAll('.caption')].map(x=>x.value);const cutN=mode==='four'?4:1;const defs=[];for(let i=0;i<cutN;i++)defs.push({role:'cut',label:mode==='four'?'CUT '+(i+1):'그림 지문',text:caps[i]||makeCaption(sceneData[i]||'',i),x:mode==='four'?[27,73,27,73][i]:50,y:mode==='four'?[40,40,90,90][i]:82,size:32,color:'#191816',spacing:0,lineHeight:1.3,font:'Pretendard'});editItems=defs.map((d,i)=>editItems[i]?Object.assign(d,editItems[i]):d);activeEdit=Math.min(activeEdit,editItems.length-1);q('#captionTabs').innerHTML=editItems.map((t,i)=>'<button data-e="'+i+'" class="'+(i===activeEdit?'on':'')+'">'+t.label+'</button>').join('');document.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{activeEdit=+b.dataset.e;syncEdit()});syncEdit()}
+function editCutBoxes(){
+  if(mode!=='four')return null;
+  // V59: frame geometry stays canonical, but text must be able to use the ACTUAL blank
+  // caption strip in an imported image (including older 22% outputs).
+  return captionBoxes||fixedCaptionBoxes(EC.width,EC.height)
+}
+function fixedCaptionBoxes(W,H){
+  // V59 canonical contract: each 533×668 CUT = 521px illustration + 147px caption.
+  const topR=521/668,capR=147/668;
+  return fixedTargetBoxes(W,H).map(b=>({x:b.x,y:b.y+b.h*topR,w:b.w,h:b.h*capR}))
+}
+function localPos(i,t){
+  if(mode!=='four')return{x:t.x,y:t.y};
+  const boxes=editCutBoxes(),b=boxes&&boxes[i];
+  if(!b)return{x:t.x,y:t.y};
+  return{x:(EC.width*t.x/100-b.x)/b.w*100,y:(EC.height*t.y/100-b.y)/b.h*100}
+}
+function setLocalPos(i,t,lx,ly){
+  if(mode!=='four'){t.x=lx;t.y=ly;return}
+  const boxes=editCutBoxes(),b=boxes&&boxes[i];
+  if(!b){t.x=lx;t.y=ly;return}
+  t.x=(b.x+b.w*lx/100)/EC.width*100;
+  t.y=(b.y+b.h*ly/100)/EC.height*100
+}
+function syncEdit(){const t=editItems[activeEdit];if(!t)return;const lp=localPos(activeEdit,t);q('#editText').value=t.text;q('#textSize').value=t.size;q('#textX').value=Math.max(0,Math.min(100,lp.x));q('#textY').value=Math.max(0,Math.min(100,lp.y));q('#textColor').value=t.color;q('#letterSpacing').value=t.spacing??0;q('#lineHeight').value=t.lineHeight??1.35;document.querySelectorAll('[data-e]').forEach((b,i)=>b.classList.toggle('on',i===activeEdit));drawEdit()}
+function fitImage(){if(!resultImg)return;return imageFitRect(resultImg.naturalWidth,resultImg.naturalHeight,EC.width,EC.height)}
+function measureSpaced(text,spacing){let w=0;for(const ch of [...text])w+=EX.measureText(ch).width+spacing;return Math.max(0,w-spacing)}function wrapParagraph(text,max,size,spacing,font){EX.font=size+'px "'+font+'", Pretendard, -apple-system, sans-serif';let lines=[],line='';for(const ch of [...text]){const z=line+ch;if(measureSpaced(z,spacing)>max&&line){lines.push(line);line=ch}else line=z}lines.push(line);return lines}function wrapText(text,max,size,spacing,font){const paragraphs=String(text??'').replace(/\r\n?/g,'\n').split('\n');let lines=[];paragraphs.forEach(p=>{if(p==='')lines.push('');else lines.push(...wrapParagraph(p,max,size,spacing,font))});return lines.length?lines:['']}function fillSpaced(text,x,y,spacing){if(!spacing){EX.fillText(text,x,y);return}const chars=[...text],total=measureSpaced(text,spacing);let px=x-total/2;EX.textAlign='left';for(const ch of chars){EX.fillText(ch,px,y);px+=EX.measureText(ch).width+spacing}EX.textAlign='center'}
+function textMaxWidth(){return mode==='four'?430:920}
+function drawEdit(){
+  EX.clearRect(0,0,EC.width,EC.height);EX.fillStyle='#fff';EX.fillRect(0,0,EC.width,EC.height);
+  if(resultImg){const r=fitImage();EX.drawImage(resultImg,r.x,r.y,r.w,r.h)}
+  if(q('#keepExistingCaption')&&q('#keepExistingCaption').checked)return;
+  const boxes=editCutBoxes();
+  editItems.forEach((t,i)=>{
+    if(!t.text)return;
+    EX.font=t.size+'px "'+(t.font||'Pretendard')+'", Pretendard, -apple-system, sans-serif';EX.fillStyle=t.color;EX.textAlign='center';EX.textBaseline='top';
+    const b=mode==='four'&&boxes?boxes[i]:null,maxW=b?Math.max(120,b.w*.88):textMaxWidth(t),
+          lines=wrapText(t.text,maxW,t.size,t.spacing||0,t.font||'Pretendard'),lh=t.size*(t.lineHeight||1.35),
+          blockH=Math.max(t.size,(lines.length-1)*lh+t.size);
+    let px=EC.width*t.x/100,topY=EC.height*t.y/100;
+    if(b){
+      // Slider 0–100 now spans the usable caption strip, not the illustration.
+      // Keep the whole multiline block inside the detected strip at both extremes.
+      const bottomPad=Math.max(3,b.h*.025),minY=b.y,maxY=Math.max(minY,b.y+b.h-bottomPad-blockH);
+      const lp=localPos(i,t),ratio=Math.max(0,Math.min(100,lp.y))/100;
+      // V59: Y means the FIRST LINE'S top anchor inside the caption strip.
+      // It no longer depends on how many wrapped lines this CUT has.
+      topY=Math.max(minY,Math.min(maxY,b.y+b.h*ratio));
+      px=Math.max(b.x+b.w*.08,Math.min(b.x+b.w*.92,px))
+    }
+    lines.forEach((ln,j)=>fillSpaced(ln,px,topY+j*lh,t.spacing||0))
+  })
+}
+q('#result').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader;rd.onload=()=>{const im=new Image;im.onload=()=>{resultImg=im;autoGrid=null;autoLayout=null;detectedPanels=null;captionBoxes=null;placedSnapshot=null;EC.width=1080;EC.height=1350;ensureItems();detectedPanels=detectPanelBoxes();autoLayout=detectBorderlessLayout();captionBoxes=detectCaptionBoxes();alignCaptionsToLayout();const placed=q('#placedCanvas');restoreEditorPreview();placed.style.display='none';placed.removeAttribute('src');delete placed.dataset.snapshotReady;q('#artFrameCanvas').style.display='block';q('#artGhost').hidden=false;q('#artGhost').style.display='flex';q('#outerEditor').hidden=true;lastFinalCanvas=null;syncEdit();drawEdit();render();const ratio=im.naturalWidth/im.naturalHeight,diff=Math.abs(ratio-.8)/.8;const qa=panelGeometryQA(detectedPanels),pxqa=pixelContractQA();q('#editStatus').textContent=diff>.02?'⚠️ 4:5가 아닌 이미지입니다. 원본은 자르지 않지만 다시 생성하는 것을 권장합니다.':!pxqa.ok?'⚠️ 픽셀 계약 불일치: '+pxqa.msg+' 프레임은 생성 이미지에 맞춰 변형하지 않고 Dayframe 고정 좌표를 유지합니다.':qa.ok?'✓ '+pxqa.msg+' Dayframe 고정 프레임 좌표를 사용합니다.':'⚠️ 픽셀 크기/빈영역은 통과했지만 CUT 경계가 기준에서 벗어났습니다. V59 프롬프트로 다시 생성하는 것을 권장합니다. (경계 오차 약 '+qa.err+'px)'};im.src=rd.result};rd.readAsDataURL(f);e.target.value=''};
+[['editText','text',0],['textSize','size',1],['textColor','color',0],['letterSpacing','spacing',1],['lineHeight','lineHeight',1]].forEach(([id,k,num])=>q('#'+id).oninput=e=>{const t=editItems[activeEdit];if(!t)return;t[k]=num?+e.target.value:e.target.value;drawEdit()});
+['textX','textY'].forEach(id=>q('#'+id).oninput=e=>{const t=editItems[activeEdit];if(!t)return;const lp=localPos(activeEdit,t),v=+e.target.value;setLocalPos(activeEdit,t,id==='textX'?v:lp.x,id==='textY'?v:lp.y);drawEdit()});
+function setEditTool(tab){const isPos=tab==='position';q('#positionPanel').hidden=!isPos;q('#stylePanel').hidden=isPos;document.querySelectorAll('[data-edittool]').forEach(b=>{const on=b.dataset.edittool===tab;b.classList.toggle('on',on);b.setAttribute('aria-selected',on?'true':'false')})}document.querySelectorAll('[data-edittool]').forEach(b=>b.onclick=()=>setEditTool(b.dataset.edittool));setEditTool('position');
+q('#fontFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const name='DayframeLocalFont'+Date.now();const face=new FontFace(name,await file.arrayBuffer());await face.load();document.fonts.add(face);const t=editItems[activeEdit];if(t)t.font=name;q('#fontStatus').textContent='적용됨 · '+file.name+' · '+(t?t.label:'');drawEdit()}catch(err){q('#fontStatus').textContent='폰트를 불러오지 못했습니다.'}};q('#applyTypeAll').onclick=()=>{const src=editItems[activeEdit];if(!src)return;const lp=localPos(activeEdit,src);editItems.forEach((t,i)=>{if(i!==activeEdit){t.font=src.font;t.size=src.size;t.spacing=src.spacing;t.lineHeight=src.lineHeight;t.color=src.color;setLocalPos(i,t,lp.x,lp.y)}});q('#fontStatus').textContent='모든 CUT의 중심 X와 첫 줄 상단 Y를 같은 지문란 좌표로 맞췄습니다. 줄 수가 달라도 첫 줄 기준은 동일합니다.';syncEdit();drawEdit()};document.querySelectorAll('[data-pos]').forEach(b=>b.onclick=()=>{const t=editItems[activeEdit];if(!t)return;const [x,y]=b.dataset.pos.split(',').map(Number);setLocalPos(activeEdit,t,x,y);q('#textX').value=x;q('#textY').value=y;drawEdit()});document.querySelectorAll('[data-nudge]').forEach(b=>b.onclick=()=>{const t=editItems[activeEdit];if(!t)return;const [dx,dy]=b.dataset.nudge.split(',').map(Number),lp=localPos(activeEdit,t),x=Math.max(0,Math.min(100,lp.x+dx)),y=Math.max(0,Math.min(100,lp.y+dy));setLocalPos(activeEdit,t,x,y);q('#textX').value=x;q('#textY').value=y;drawEdit()});let edrag=false;EC.onpointerdown=e=>{if(!editItems.length)return;edrag=true;EC.setPointerCapture(e.pointerId)};EC.onpointermove=e=>{if(!edrag)return;e.preventDefault();const r=EC.getBoundingClientRect(),t=editItems[activeEdit],gx=(e.clientX-r.left)/r.width*EC.width,gy=(e.clientY-r.top)/r.height*EC.height;if(mode==='four'){const boxes=editCutBoxes(),b=boxes&&boxes[activeEdit];if(b){const x=Math.max(0,Math.min(100,(gx-b.x)/b.w*100)),y=Math.max(0,Math.min(100,(gy-b.y)/b.h*100));setLocalPos(activeEdit,t,x,y);q('#textX').value=x;q('#textY').value=y}else{t.x=gx/EC.width*100;t.y=gy/EC.height*100}}else{t.x=gx/EC.width*100;t.y=gy/EC.height*100;q('#textX').value=t.x;q('#textY').value=t.y}drawEdit()};EC.onpointerup=()=>edrag=false;EC.onpointercancel=()=>edrag=false;
+let autoGrid=null,autoLayout=null,detectedPanels=null,captionBoxes=null;
+function imageFitRect(iw,ih,W,H){
+  const sc=Math.min(W/iw,H/ih),w=iw*sc,h=ih*sc;
+  return{x:(W-w)/2,y:(H-h)/2,w,h}
+}
+function sourceCanvas(){
+  const c=document.createElement('canvas');c.width=EC.width;c.height=EC.height;
+  const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);
+  if(resultImg){const r=imageFitRect(resultImg.naturalWidth,resultImg.naturalHeight,c.width,c.height);x.drawImage(resultImg,r.x,r.y,r.w,r.h)}
+  return c
+}
+function profileBand(data,w,h,axis,a,b){
+  const vals=[],step=3;
+  for(let p=a;p<=b;p++){
+    let dark=0,total=0;
+    if(axis==='x'){for(let y=Math.floor(h*.05);y<h*.95;y+=step){const k=(y*w+p)*4,l=.2126*data[k]+.7152*data[k+1]+.0722*data[k+2];if(l<115)dark++;total++}}
+    else{for(let x=Math.floor(w*.05);x<w*.95;x+=step){const k=(p*w+x)*4,l=.2126*data[k]+.7152*data[k+1]+.0722*data[k+2];if(l<115)dark++;total++}}
+    vals.push({p,v:total?dark/total:0})
+  }
+  const max=Math.max(...vals.map(o=>o.v)),cut=Math.max(.12,max*.48);
+  const strong=vals.filter(o=>o.v>=cut);
+  if(!strong.length)return null;
+  const peak=vals.reduce((m,o)=>o.v>m.v?o:m,vals[0]),near=strong.filter(o=>Math.abs(o.p-peak.p)<=36);
+  return{min:Math.min(...near.map(o=>o.p)),max:Math.max(...near.map(o=>o.p)),peak:peak.p,score:max}
+}
+
+function longestWhiteRun(vals,start,end,threshold){
+  let best=null,st=null;
+  for(let i=start;i<=end;i++){
+    if(vals[i]>=threshold&&st===null)st=i;
+    if((vals[i]<threshold||i===end)&&st!==null){
+      const en=(vals[i]<threshold?i-1:i),len=en-st+1;
+      if(!best||len>best.len)best={start:st,end:en,len};
+      st=null
+    }
+  }
+  return best
+}
+function detectPanelBoxes(){
+  if(!resultImg||mode!=='four')return null;
+  const c=sourceCanvas(),x=c.getContext('2d'),w=c.width,h=c.height,d=x.getImageData(0,0,w,h).data;
+  const cols=new Float32Array(w),rows=new Float32Array(h);
+  for(let xx=0;xx<w;xx++){let blank=0,total=0;for(let yy=0;yy<h;yy+=3){const k=(yy*w+xx)*4,r=d[k],g=d[k+1],b=d[k+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b);if(r>235&&g>235&&b>235&&mx-mn<22)blank++;total++}cols[xx]=blank/total}
+  for(let yy=0;yy<h;yy++){let blank=0,total=0;for(let xx=0;xx<w;xx+=3){const k=(yy*w+xx)*4,r=d[k],g=d[k+1],b=d[k+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b);if(r>235&&g>235&&b>235&&mx-mn<22)blank++;total++}rows[yy]=blank/total}
+  const vg=longestWhiteRun(cols,Math.floor(w*.38),Math.floor(w*.62),.88);
+  let x1,x2;
+  if(vg&&vg.len>=3){x1=vg.start;x2=vg.end+1}else{x1=w*(533/1080);x2=w*(547/1080)}
+  // The horizontal white caption strip can be very tall, so its START is not the row boundary.
+  // Find the strongest white -> illustration transition near the middle instead.
+  let bestY=-1,bestScore=0,span=Math.max(6,Math.round(h*.008));
+  for(let yy=Math.floor(h*.40);yy<=Math.floor(h*.60);yy++){
+    let before=0,after=0,n1=0,n2=0;
+    for(let k=Math.max(0,yy-span);k<yy;k++){before+=rows[k];n1++}
+    for(let k=yy;k<Math.min(h,yy+span);k++){after+=rows[k];n2++}
+    const score=(n1?before/n1:0)-(n2?after/n2:0);
+    if(score>bestScore){bestScore=score;bestY=yy}
+  }
+  const y2=bestScore>.28?bestY:h*(682/1350);
+  return[
+    {x:0,y:0,w:x1,h:y2},
+    {x:x2,y:0,w:w-x2,h:y2},
+    {x:0,y:y2,w:x1,h:h-y2},
+    {x:x2,y:y2,w:w-x2,h:h-y2}
+  ]
+}
+function panelBoxesFor(W,H){
+  // V59 invariant: Dayframe Ink output geometry never follows a malformed AI layout.
+  // Detection is used only to warn the user; frame/export coordinates stay canonical.
+  return fixedTargetBoxes(W,H)
+}
+function panelGeometryQA(boxes){
+  if(!boxes||boxes.length!==4)return{ok:false,reason:'CUT 경계를 안정적으로 감지하지 못했습니다.'};
+  const ref=fixedTargetBoxes(EC.width,EC.height),tol=8;
+  const err=Math.max(...boxes.flatMap((b,i)=>[
+    Math.abs(b.x-ref[i].x),Math.abs(b.y-ref[i].y),
+    Math.abs((b.x+b.w)-(ref[i].x+ref[i].w)),
+    Math.abs((b.y+b.h)-(ref[i].y+ref[i].h))
+  ]));
+  return{ok:err<=tol,err:Math.round(err),reason:err<=tol?'정상 규격':'생성 이미지의 2×2 비율이 기준에서 크게 벗어났습니다.'}
+}
+function detectCaptionBoxes(){
+  if(!resultImg||mode!=='four')return null;
+  const c=sourceCanvas(),x=c.getContext('2d'),w=c.width,h=c.height,d=x.getImageData(0,0,w,h).data;
+  // V59: detect each blank strip only as evidence, then normalize all four CUTs
+  // to ONE relative caption coordinate system. One noisy CUT can no longer shift
+  // its own X/Y origin and make "전체 적용" look misaligned.
+  const panels=fixedTargetBoxes(w,h);
+  const found=panels.map(b=>{
+    const x0=Math.max(0,Math.floor(b.x+b.w*.07)),x1=Math.min(w-1,Math.ceil(b.x+b.w*.93));
+    const y0=Math.max(0,Math.floor(b.y+b.h*.58)),y1=Math.min(h-1,Math.ceil(b.y+b.h*.99));
+    const vals=[];
+    for(let yy=y0;yy<=y1;yy+=2){
+      let blank=0,total=0;
+      for(let xx=x0;xx<=x1;xx+=4){
+        const k=(yy*w+xx)*4,r=d[k],g=d[k+1],bl=d[k+2],mx=Math.max(r,g,bl),mn=Math.min(r,g,bl);
+        if(r>235&&g>235&&bl>235&&mx-mn<22)blank++;
+        total++
+      }
+      vals.push({y:yy,v:total?blank/total:0})
+    }
+    let runs=[],st=null,sum=0,n=0;
+    vals.forEach((o,i)=>{
+      const on=o.v>=.60;
+      if(on&&st===null){st=i;sum=0;n=0}
+      if(on){sum+=o.v;n++}
+      if((!on||i===vals.length-1)&&st!==null){
+        const en=on&&i===vals.length-1?i:i-1;
+        runs.push({st,en,len:en-st+1,avg:n?sum/n:0});
+        st=null
+      }
+    });
+    const minLen=Math.max(10,Math.floor(b.h*.09/2));
+    runs=runs.filter(r=>r.len>=minLen);
+    const best=runs.sort((a,z)=>{
+      const ah=(vals[a.en].y-vals[a.st].y+2)/b.h,zh=(vals[z.en].y-vals[z.st].y+2)/b.h;
+      const ay=(vals[a.st].y-b.y)/b.h,zy=(vals[z.st].y-b.y)/b.h;
+      return (z.avg*2.2+zh*1.8+zy*.35)-(a.avg*2.2+ah*1.8+ay*.35)
+    })[0];
+    let topR=521/668,bottomR=1;
+    if(best){
+      topR=(vals[best.st].y-b.y)/b.h;
+      bottomR=(vals[best.en].y+2-b.y)/b.h;
+      if(bottomR-topR<.105){topR=521/668;bottomR=1}
+    }
+    return{topR,bottomR}
+  });
+  const median=a=>{const z=[...a].sort((m,n)=>m-n);return (z[1]+z[2])/2};
+  let topR=Math.max(.58,Math.min(.90,median(found.map(v=>v.topR))));
+  let bottomR=Math.max(topR+.13,Math.min(.985,median(found.map(v=>v.bottomR))));
+  if(bottomR-topR<.13){topR=521/668;bottomR=1}
+  return panels.map(b=>{
+    const sideInset=b.w*.035,bottomInset=Math.max(4,b.h*.008);
+    const top=b.y+b.h*topR,bottom=b.y+b.h*bottomR-bottomInset;
+    return{x:b.x+sideInset,y:top,w:b.w-sideInset*2,h:Math.max(b.h*.13,bottom-top)}
+  })
+}
+
+function pixelContractQA(){
+  if(!resultImg||mode!=='four')return{ok:true,msg:'1컷 모드'};
+  if(resultImg.naturalWidth!==1080||resultImg.naturalHeight!==1350)return{ok:false,msg:'원본 파일 크기가 '+resultImg.naturalWidth+'×'+resultImg.naturalHeight+'px 입니다. 1080×1350 실제 픽셀이 아닙니다.'};
+  const c=document.createElement('canvas');c.width=1080;c.height=1350;const x=c.getContext('2d');x.drawImage(resultImg,0,0);const d=x.getImageData(0,0,1080,1350).data,target=[248,247,245];
+  const zones=[[533,0,547,1350,'세로 14px 거터'],[0,668,1080,682,'가로 14px 거터'],[0,521,533,668,'CUT1 147px 캡션'],[547,521,1080,668,'CUT2 147px 캡션'],[0,1203,533,1350,'CUT3 147px 캡션'],[547,1203,1080,1350,'CUT4 147px 캡션']];
+  const bad=[];for(const [x0,y0,x1,y1,label] of zones){let n=0,fail=0;for(let yy=y0;yy<y1;yy+=3)for(let xx=x0;xx<x1;xx+=3){const k=(yy*1080+xx)*4,delta=Math.max(Math.abs(d[k]-target[0]),Math.abs(d[k+1]-target[1]),Math.abs(d[k+2]-target[2]));n++;if(delta>10)fail++}const ratio=n?fail/n:1;if(ratio>.02)bad.push(label+' 불일치 '+Math.round(ratio*100)+'%')}
+  return bad.length?{ok:false,msg:bad.join(' · ')}:{ok:true,msg:'실제 1080×1350 픽셀과 14px 거터·147px 캡션 #F8F7F5 영역을 검사했습니다.'}
+}
+
+function detectBorderlessLayout(){
+  if(!resultImg||mode!=='four')return null;
+  const c=sourceCanvas(),x=c.getContext('2d'),w=c.width,h=c.height,d=x.getImageData(0,0,w,h).data;
+  const cols=new Float32Array(w),rows=new Float32Array(h),ys=4,xs=4;
+  for(let xx=0;xx<w;xx++){let n=0,t=0;for(let yy=0;yy<h;yy+=ys){const k=(yy*w+xx)*4;if(d[k]>245&&d[k+1]>245&&d[k+2]>245)n++;t++}cols[xx]=n/t}
+  for(let yy=0;yy<h;yy++){let n=0,t=0;for(let xx=0;xx<w;xx+=xs){const k=(yy*w+xx)*4;if(d[k]>245&&d[k+1]>245&&d[k+2]>245)n++;t++}rows[yy]=n/t}
+  const vg=longestWhiteRun(cols,Math.floor(w*.34),Math.floor(w*.66),.82),
+        hg=longestWhiteRun(rows,Math.floor(h*.34),Math.floor(h*.66),.82);
+  if(!vg||!hg||vg.len<3||hg.len<3)return null;
+  let bottom=h-1;while(bottom>hg.end+30&&rows[bottom]>.94)bottom--;
+  bottom=Math.min(h,bottom+1);
+  if(bottom<h*.72)bottom=h;
+  return{x0:0,x1:vg.start,x2:vg.end+1,x3:w,y0:0,y1:hg.start,y2:hg.end+1,y3:bottom,w,h}
+}
+function layoutBoxes(layout){
+  if(!layout)return null;
+  return[
+    {x:layout.x0,y:layout.y0,w:layout.x1-layout.x0,h:layout.y1-layout.y0},
+    {x:layout.x2,y:layout.y0,w:layout.x3-layout.x2,h:layout.y1-layout.y0},
+    {x:layout.x0,y:layout.y2,w:layout.x1-layout.x0,h:layout.y3-layout.y2},
+    {x:layout.x2,y:layout.y2,w:layout.x3-layout.x2,h:layout.y3-layout.y2}
+  ]
+}
+function alignCaptionsToLayout(){if(mode!=='four'||editItems.length<4)return;editItems.forEach((t,i)=>setLocalPos(i,t,50,38))}
+function detectGrid(){
+  if(!resultImg||mode!=='four')return null;
+  const c=sourceCanvas(),x=c.getContext('2d'),w=c.width,h=c.height,data=x.getImageData(0,0,w,h).data;
+  const left=profileBand(data,w,h,'x',0,Math.floor(w*.22)),
+        right=profileBand(data,w,h,'x',Math.floor(w*.78),w-1),
+        midV=profileBand(data,w,h,'x',Math.floor(w*.42),Math.floor(w*.58)),
+        top=profileBand(data,w,h,'y',0,Math.floor(h*.22)),
+        bottom=profileBand(data,w,h,'y',Math.floor(h*.78),h-1),
+        midH=profileBand(data,w,h,'y',Math.floor(h*.40),Math.floor(h*.60));
+  if(!left||!right||!midV||!top||!bottom||!midH)return null;
+  const bands=[left,right,midV,top,bottom,midH];
+  if(bands.some(b=>b.score<.42))return null;
+  return{left,right,midV,top,bottom,midH}
+}
+
+function fixedTargetBoxes(W,H){
+  const gx=W*(14/1080),gy=H*(14/1350),w=(W-gx)/2,h=(H-gy)/2;
+  return[{x:0,y:0,w,h},{x:w+gx,y:0,w,h},{x:0,y:h+gy,w,h},{x:w+gx,y:h+gy,w,h}]
+}
+function normalizeFrameLanes(ctx,W,H){
+  if(mode!=='four')return;
+  const x0=W*(533/1080),gx=W*(14/1080),y0=H*(668/1350),gy=H*(14/1350);
+  ctx.save();ctx.fillStyle='#F8F7F5';
+  ctx.fillRect(x0,0,gx,H);
+  ctx.fillRect(0,y0,W,gy);
+  ctx.restore()
+}
+function drawNormalizedFour(ctx,W,H){
+  drawEdit();ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+  ctx.drawImage(EC,0,0,EC.width,EC.height,0,0,W,H);
+  normalizeFrameLanes(ctx,W,H)
+}
+function makeContentSnapshot(){
+  drawEdit();
+  const out=document.createElement('canvas');out.width=1080;out.height=1350;
+  const x=out.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,out.width,out.height);
+  x.drawImage(EC,0,0,EC.width,EC.height,0,0,out.width,out.height);
+  return out
+}
+const editorCanvasHome=q('.preview'),editorCanvasParking=document.createDocumentFragment();
+function parkEditorPreview(){
+  if(EC.parentNode===editorCanvasHome)editorCanvasParking.appendChild(EC);
+  editorCanvasHome.classList.add('placedDone')
+}
+function restoreEditorPreview(){
+  if(EC.parentNode!==editorCanvasHome)editorCanvasHome.appendChild(EC);
+  editorCanvasHome.classList.remove('placedDone')
+}
+function drawPlacedArt(){
+  const im=q('#placedCanvas');if(!im||!placedSnapshot)return;
+  if(!im.dataset.snapshotReady){
+    im.src=placedSnapshot.toDataURL('image/png',1);
+    im.dataset.snapshotReady='1'
+  }
+}
+function maskOutsideCutFrames(ctx,W,H,width,widthScale=1){
+  // V74 isolated fix: only the SAVED 4:5 PNG is masked outside each Ink frame.
+  // Frame geometry, 14px gutters, captions, V3 line texture and the long Dayframe stay untouched.
+  if(mode!=='four')return;
+  const visualW=Math.max(1,width*widthScale),inset=Math.max(3,visualW*.58+1.5);
+  ctx.save();ctx.fillStyle='#F8F7F5';
+  panelBoxesFor(W,H).forEach(b=>{
+    const e=frameEdgeCoords(b,W,H,inset),r=b.x+b.w,bt=b.y+b.h;
+    if(e.t>b.y)ctx.fillRect(b.x,b.y,b.w,e.t-b.y);
+    if(bt>e.b)ctx.fillRect(b.x,e.b,b.w,bt-e.b);
+    if(e.l>b.x)ctx.fillRect(b.x,e.t,e.l-b.x,Math.max(0,e.b-e.t));
+    if(r>e.r)ctx.fillRect(e.r,e.t,r-e.r,Math.max(0,e.b-e.t));
+  });
+  ctx.restore()
+}
+function renderProcessed45(includeFrame=true){
+  const out=document.createElement('canvas');out.width=1080;out.height=1350;
+  const x=out.getContext('2d');
+  if(mode==='four')drawNormalizedFour(x,out.width,out.height);
+  else{drawEdit();x.fillStyle='#fff';x.fillRect(0,0,out.width,out.height);x.drawImage(EC,0,0,out.width,out.height)}
+  if(includeFrame){
+    // Preserve V72's approved V3 drawing scale. Mask only the pixels OUTSIDE those exact frame centers.
+    const ar=q('#artArea').getBoundingClientRect(),vrW=ar.width||360,vrH=ar.height||450,sx=out.width/vrW,sy=out.height/vrH;
+    x.save();x.scale(sx,sy);
+    maskOutsideCutFrames(x,vrW,vrH,cutFrameStyle.width,1);
+    drawCutFrameSet(x,vrW,vrH,cutFrameStyle.width,cutFrameStyle.color,1);
+    x.restore()
+  }
+  return out
+}
+function downloadCanvas(canvas,name){
+  canvas.toBlob(blob=>{if(!blob)return;const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)},'image/png')
+}
+let last45Canvas=null,lastFinalCanvas=null,lastInstagramCanvas=null,placedSnapshot=null;
+const outerItems=[
+{label:'상단 왼쪽',target:'frameHeaderL',text:'',size:18,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'상단 오른쪽',target:'frameHeaderR',text:'',size:16,spacing:0,lineHeight:1.25,color:'#191816',x:50,y:50,font:'Pretendard'},
+{label:'하단 기록',target:'frameNote',text:'',size:18,spacing:0,lineHeight:1.5,color:'#191816',x:50,y:50,font:'Pretendard'}];let activeOuter=0;function applyOuter(){outerItems.forEach(t=>{const el=q('#'+t.target),parent=el.parentElement;el.textContent=t.text;el.style.fontFamily='"'+t.font+'", Pretendard, sans-serif';el.style.fontSize=t.size+'px';el.style.letterSpacing=t.spacing+'px';el.style.lineHeight=t.lineHeight;el.style.color=t.color;const safeX=Math.max(6,Math.min(94,t.x)),safeY=Math.max(6,Math.min(94,t.y)),halfAvail=Math.max(6,Math.min(safeX-4,96-safeX));el.style.width=Math.min(90,halfAvail*2)+'%';el.style.left=safeX+'%';el.style.top=safeY+'%';requestAnimationFrame(()=>{const ph=parent.clientHeight,eh=el.offsetHeight;if(ph&&eh){const half=eh/2/ph*100,cy=Math.max(half+4,Math.min(96-half,safeY));el.style.top=cy+'%'}})})}function syncOuter(){const t=outerItems[activeOuter];q('#outerText').value=t.text;q('#outerSize').value=t.size;q('#outerSpacing').value=t.spacing;q('#outerLineHeight').value=t.lineHeight;q('#outerColor').value=t.color;q('#outerX').value=t.x;q('#outerY').value=t.y;document.querySelectorAll('[data-o]').forEach((b,i)=>b.classList.toggle('on',i===activeOuter));applyOuter()}document.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{activeOuter=+b.dataset.o;syncOuter()});[['outerText','text',0],['outerSize','size',1],['outerSpacing','spacing',1],['outerLineHeight','lineHeight',1],['outerColor','color',0],['outerX','x',1],['outerY','y',1]].forEach(([id,k,num])=>q('#'+id).oninput=e=>{outerItems[activeOuter][k]=num?+e.target.value:e.target.value;applyOuter()});q('#outerFontFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const name='DayframeOuterFont'+Date.now(),face=new FontFace(name,await file.arrayBuffer());await face.load();document.fonts.add(face);outerItems[activeOuter].font=name;q('#outerFontStatus').textContent='적용됨 · '+file.name+' · '+outerItems[activeOuter].label;applyOuter()}catch{q('#outerFontStatus').textContent='폰트를 불러오지 못했습니다.'}};q('#applyOuterFontAll').onclick=()=>{const src=outerItems[activeOuter];if(!src)return;outerItems.forEach(t=>t.font=src.font);q('#outerFontStatus').textContent='현재 선택한 폰트를 상단 2칸 + 하단 기록에 동일 적용했습니다. 크기·자간·행간·색상·위치는 각각 유지됩니다.';applyOuter()};function setFrameColor(value,save=true){const v=value||'#302e2a';outerFrameStyle.color=v;const top=q('#frameColorTop'),later=q('#outerFrameColor'),hex=q('#frameColorHex');if(top&&top.value!==v)top.value=v;if(later&&later.value!==v)later.value=v;if(hex)hex.textContent=v.toLowerCase();if(save)localStorage.setItem('dayframeInk.frameColor',v);render()}
+q('#frameColorTop').oninput=e=>setFrameColor(e.target.value);
+q('#outerFrameColor').oninput=e=>setFrameColor(e.target.value);function updateGuides(){const count=+q('#guideCount').value,gap=+q('#guideGap').value,center=+q('#guideY').value,opacity=+q('#guideOpacity').value/100,els=[q('.g1'),q('.g2'),q('.g3')];const note=q('.note');note.querySelectorAll('.extraGuide').forEach(e=>e.remove());const all=[];for(let i=0;i<count;i++){let el=els[i];if(!el){el=document.createElement('i');el.className='guide extraGuide';note.append(el)}all.push(el)}els.forEach((el,i)=>{el.style.display=i<count?'block':'none'});const lines=[...all];lines.forEach((el,i)=>{const pos=center+(i-(count-1)/2)*gap;el.style.top=Math.max(8,Math.min(92,pos))+'%';el.style.opacity=opacity})}['guideCount','guideGap','guideY','guideOpacity'].forEach(id=>q('#'+id).oninput=updateGuides);q('#cutFrameWidth').oninput=e=>{cutFrameStyle.width=+e.target.value;q('#cutFrameWidthOut').textContent=cutFrameStyle.width.toFixed(1);if(last45Canvas){last45Canvas=renderProcessed45(true);q('#savedImage').src=last45Canvas.toDataURL('image/png',1)}};
+q('#cutFrameColor').oninput=e=>{cutFrameStyle.color=e.target.value;if(last45Canvas){last45Canvas=renderProcessed45(true);q('#savedImage').src=last45Canvas.toDataURL('image/png',1)}};
+q('#stripOldFrames').onchange=()=>{};q('#autoStrip').onclick=()=>{if(!resultImg)return alert('생성 이미지를 먼저 가져와 주세요.');autoGrid=detectGrid();q('#stripStatus').textContent=autoGrid?'기존 4컷의 바깥·가운데 선을 찾았습니다. 네 컷을 따로 확대하지 않고 전체를 한 번에 맞춥니다. 필요하면 ‘기존 선 가림 여백’만 조금 조절하세요.':'제거할 기존 테두리가 감지되지 않았습니다. 원본 4:5 비율과 구도는 그대로 유지하고 앱 Ink 프레임만 추가합니다.';};q('#stripAdjust').oninput=()=>{};q('#keepExistingCaption').onchange=()=>{drawEdit();};
+
+function drawWrappedExportText(ctx,item,parentRect,paperRect,scale){
+  if(!item.text)return;
+  // V74: export the text from the exact DOM layout that the user is previewing.
+  // Do not independently recalculate wrapping / vertical clamping on the export canvas.
+  const el=q('#'+item.target);if(!el)return;
+  const cs=getComputedStyle(el),node=el.firstChild;if(!node||node.nodeType!==Node.TEXT_NODE)return;
+  const fontSize=parseFloat(cs.fontSize)||item.size||16;
+  ctx.save();
+  ctx.font=fontSize*scale+'px '+cs.fontFamily;
+  ctx.fillStyle=cs.color||item.color;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  const text=node.textContent||'',range=document.createRange();let offset=0;
+  for(const ch of Array.from(text)){
+    const next=offset+ch.length;
+    if(ch!=='\n'&&ch!=='\r'&&ch!==' '&&ch!=='\t'){
+      range.setStart(node,offset);range.setEnd(node,next);
+      const r=range.getBoundingClientRect();
+      if(r.width||r.height){
+        const px=(r.left+r.width/2-paperRect.left)*scale;
+        const py=(r.top+r.height/2-paperRect.top)*scale;
+        ctx.fillText(ch,px,py);
+      }
+    }
+    offset=next;
+  }
+  range.detach?.();ctx.restore();
+}
+function renderFinalFrame(){
+  render();drawPlacedArt();updateGuides();
+  const paper=q('.paper'),pr=paper.getBoundingClientRect(),W=1080,S=W/pr.width,H=Math.round(pr.height*S),out=document.createElement('canvas');out.width=W;out.height=H;
+  const x=out.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,H);
+  const drawElCanvas=c=>{if(getComputedStyle(c).display==='none')return;const r=c.getBoundingClientRect();x.drawImage(c,(r.left-pr.left)*S,(r.top-pr.top)*S,r.width*S,r.height*S)};
+  // V74: placedCanvas is blank-caption content; artFrameCanvas is the single long-Dayframe Ink layer; CUT text is a separate overlay.
+  q('.header').querySelectorAll('canvas').forEach(drawElCanvas);
+  drawElCanvas(q('#placedCanvas'));
+  drawElCanvas(q('#artFrameCanvas'));
+  q('.note').querySelectorAll('canvas').forEach(drawElCanvas);
+  q('.note').querySelectorAll('.guide').forEach(g=>{if(getComputedStyle(g).display==='none')return;const r=g.getBoundingClientRect(),cs=getComputedStyle(g);x.save();x.globalAlpha=parseFloat(cs.opacity)||1;x.fillStyle=cs.backgroundColor||'#625f58';x.fillRect((r.left-pr.left)*S,(r.top-pr.top)*S,Math.max(1,r.width*S),Math.max(1,r.height*S));x.restore()});
+  const parents=[q('.header .box:first-child'),q('.header .box:last-child'),q('.note')];
+  outerItems.forEach((t,i)=>drawWrappedExportText(x,t,parents[i].getBoundingClientRect(),pr,S));
+  return out
+}
+function renderTopArtBase(){
+  // V74: preserve the CURRENT completed 4:5 editor state, including CUT 1–4 captions.
+  const out=document.createElement('canvas');out.width=1080;out.height=1350;const x=out.getContext('2d');
+  if(mode==='four')drawNormalizedFour(x,out.width,out.height);
+  else{drawEdit();x.fillStyle='#fff';x.fillRect(0,0,out.width,out.height);x.drawImage(EC,0,0,EC.width,EC.height,0,0,out.width,out.height)}
+  return out
+}
+q('#placeInFrame').onclick=()=>{if(!resultImg)return alert('생성 이미지를 먼저 가져와 주세요.');if(mode==='four'&&q('#stripOldFrames').checked&&!autoGrid)autoGrid=detectGrid();
+  placedSnapshot=renderTopArtBase();
+  activeOuter=0;
+  const c=q('#placedCanvas');c.removeAttribute('src');delete c.dataset.snapshotReady;drawPlacedArt();c.style.display='block';q('#artFrameCanvas').style.display='block';drawArtFrames();q('#artGhost').hidden=true;q('#artGhost').style.display='none';parkEditorPreview();q('#outerEditor').hidden=false;
+  if(!outerItems[2].text)outerItems[2].text=q('#diary').value.trim();
+  syncOuter();updateGuides();
+  requestAnimationFrame(()=>{const ar=q('#artArea').getBoundingClientRect(),ir=c.getBoundingClientRect(),root=document.documentElement,ok=Math.abs(ar.left-ir.left)<.75&&Math.abs(ar.width-ir.width)<.75&&root.scrollWidth<=root.clientWidth+1;q('#editStatus').textContent=(ok?'✓ ':'⚠️ ')+'가운데 4컷과 CUT 1~4 지문은 완성한 4:5 상태 그대로 올렸습니다. 상단 왼쪽·상단 오른쪽·하단 기록만 새로 입력합니다. 14px 빈 거터와 현재 Ink 프레임 설정은 그대로 유지합니다.'});
+  q('#outerEditor').scrollIntoView({behavior:'auto',block:'nearest'})
+};
+q('#backToCutEdit').onclick=()=>{restoreEditorPreview();drawEdit();q('.editgrid').scrollIntoView({behavior:'auto',block:'start'})};
+q('#saveImage').onclick=()=>{if(!resultImg)return alert('생성 이미지를 먼저 가져와 주세요.');if(mode==='four'&&q('#stripOldFrames').checked&&!autoGrid)autoGrid=detectGrid();last45Canvas=renderProcessed45(true);q('#savedImage').src=last45Canvas.toDataURL('image/png',1);q('#savedImage').hidden=false;q('#download45').hidden=false;q('#instagramPanel').hidden=false;lastInstagramCanvas=null;q('#instagramPreview').hidden=true;q('#downloadInstagram').hidden=true;q('#editStatus').textContent='지문과 4:5 전용의 조금 더 가는 Ink 프레임을 반영한 1080×1350 이미지가 생성되었습니다. 자글자글 질감은 그대로이며, 아래 Instagram 여백 가공으로 게시용 여백도 추가할 수 있습니다.'};
+q('#download45').onclick=()=>{if(!last45Canvas)q('#saveImage').click();setTimeout(()=>{if(last45Canvas)downloadCanvas(last45Canvas,'dayframe-ink-4x5.png')},0)};q('#instaMargin').oninput=()=>{q('#instaMarginOut').textContent=q('#instaMargin').value+'%';if(last45Canvas)makeInstagramPreview()};q('#instaBg').oninput=()=>{if(last45Canvas)makeInstagramPreview()};function makeInstagramPreview(){if(!last45Canvas)return;const W=1080,H=1350,p=+q('#instaMargin').value/100,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.fillStyle=q('#instaBg').value;x.fillRect(0,0,W,H);const dx=Math.round(W*p),dy=Math.round(H*p),dw=W-dx*2,dh=H-dy*2;x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';x.drawImage(last45Canvas,dx,dy,dw,dh);lastInstagramCanvas=c;const pv=q('#instagramPreview');pv.width=W;pv.height=H;pv.getContext('2d').drawImage(c,0,0);pv.hidden=false;q('#downloadInstagram').hidden=false}q('#makeInstagram').onclick=()=>{if(!last45Canvas)return alert('먼저 ② 지문까지 넣은 4:5 이미지를 만들어 주세요.');makeInstagramPreview()};q('#downloadInstagram').onclick=()=>{if(!lastInstagramCanvas)makeInstagramPreview();if(lastInstagramCanvas)downloadCanvas(lastInstagramCanvas,'dayframe-ink-instagram-margin.png')};
+q('#makeFinalFrame').onclick=()=>{if(!placedSnapshot)return alert('먼저 4:5 이미지를 위 그림 영역에 넣어 주세요.');lastFinalCanvas=renderFinalFrame();q('#finalFrameImage').src=lastFinalCanvas.toDataURL('image/png',1);q('#finalFrameImage').hidden=false;q('#downloadFinalFrame').hidden=false;q('#finalFrameStatus').textContent='상단 2칸 + 그림영역 + 하단 기록까지 한 장의 긴 Dayframe PNG로 만들었습니다.'};
+q('#downloadFinalFrame').onclick=()=>{lastFinalCanvas=renderFinalFrame();downloadCanvas(lastFinalCanvas,'dayframe-ink-complete.png')};
+</script><script>(function(){function qa(){var r=document.documentElement;if(r.scrollWidth>r.clientWidth+1){document.querySelectorAll('.wf,.instapanel,.outerEditor,.editgrid,.finalexport').forEach(function(e){e.style.maxWidth='100%';e.style.minWidth='0'});document.querySelectorAll('.saveimg,.instaPreview,#savedImage,#finalFrameImage,#instagramPreview').forEach(function(e){e.style.width='100%';e.style.maxWidth='100%';e.style.height='auto'})}}addEventListener('resize',qa);new MutationObserver(qa).observe(document.body,{subtree:true,attributes:true,attributeFilter:['hidden','src','style']});setTimeout(qa,0)})();</script></body></html>
