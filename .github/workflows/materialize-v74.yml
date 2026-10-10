@@ -1,0 +1,41 @@
+name: Materialize Dayframe Ink V74
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'materialize-v74.mjs'
+      - 'ihiri-fixed-guide-v2.4.md'
+      - '.github/workflows/materialize-v74.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Materialize static V74
+        run: node materialize-v74.mjs
+      - name: Verify V74 guide-only update
+        run: |
+          grep -q 'V74 STATIC BUILD' v74.html
+          grep -q '고정 이미지 가이드 v2.4' v74.html
+          grep -q '승인된 4컷의 CUT 1 이히리 얼굴' v74.html
+          grep -q 'RGB (248, 247, 245)' v74.html
+          grep -q 'maskOutsideCutFrames' v74.html
+          grep -q 'export the text from the exact DOM layout' v74.html
+          grep -q 'function renderTopArtBase' v74.html
+          ! grep -q "fetch('./base-v59.html" v74.html
+          ! grep -q "fetch('./v66.html" v74.html
+      - name: Commit static V74
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add v74.html index.html
+          git commit -m "Publish Dayframe Ink V74 fixed image guide v2.4"
+          git push
